@@ -30,7 +30,7 @@ async function main() {
   let targetVersion = '';
 
   // 1：执行打包 build
-  // await run('npm', ['run', 'build']);
+  await run('npm', ['run', 'build']);
 
   // 2：变更 version 号
   const { release } = await enquirer.prompt({
@@ -67,7 +67,7 @@ async function main() {
   updateVersions(targetVersion);
 
   // 3：npm 发布
-
+  await run('npm', ['publish', '--registry', 'https://registry.npmjs.org']);
 
   // 4：push 代码仓库
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' });
