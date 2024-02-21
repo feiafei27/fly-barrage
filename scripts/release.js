@@ -10,6 +10,7 @@ import fs from 'fs';
 import { execa } from 'execa';
 import enquirer from 'enquirer';
 import semver from 'semver';
+import pico from 'picocolors';
 
 // 当前的版本号
 const packageString = fs.readFileSync('./package.json', 'utf8');
@@ -25,12 +26,16 @@ const versionIncrements = [
 const inc = i => semver.inc(currentVersion, i);
 const run = (bin, args, opts = {}) =>
   execa(bin, args, { stdio: 'inherit', ...opts });
+const stepStart = msg => console.log(pico.cyan(msg));
+const stepEnd = msg => console.log(pico.green(msg));
 
 async function main() {
   let targetVersion = '';
 
   // 1：执行打包 build
+  stepStart('执行打包...');
   await run('npm', ['run', 'build']);
+  stepEnd('打包完成');
 
   // 2：变更 version 号
   const { release } = await enquirer.prompt({
@@ -67,11 +72,14 @@ async function main() {
   updateVersions(targetVersion);
 
   // 3：npm 发布
+  stepStart('发布 npm ...');
   await run('npm', ['publish', '--registry', 'https://registry.npmjs.org']);
+  stepEnd('发布成功');
 
   // 4：push 代码仓库
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' });
   if (stdout) {
+    stepStart('推送代码仓库 ...');
     await run('git', ['add', '-A']);
     await run('git', ['commit', '-m', `release: v${targetVersion}`]);
 
@@ -83,6 +91,7 @@ async function main() {
     ];
     await Promise.all(remotes.map(remote => run('git', ['push', remote, `refs/tags/v${targetVersion}`])));
     await Promise.all(remotes.map(remote => run('git', ['push', remote])));
+    stepEnd('推送成功');
   } else {
     console.log('No changes to commit.')
   }
