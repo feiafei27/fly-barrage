@@ -1,6 +1,7 @@
 弹幕有三种类型，分别是：滚动弹幕、顶部底部弹幕和高级弹幕。
-
-类型文件如下所示：
+```ts
+export type BarrageOptions = ScrollBarrageOptions | FixedBarrageOptions | SeniorBarrageOptions;
+```
 
 ## 所有弹幕共有的配置项
 ```ts
@@ -66,6 +67,12 @@ export type ScrollBarrageOptions = BaseBarrageOptions & {
   barrageType: 'scroll';
 }
 ```
+::: warning 注意
+出于性能以及实际渲染效果的考虑，请不要将滚动弹幕的 fontSize 设置的差距过大，最好将滚动弹幕的 fontSize 设置成固定的几个值。
+
+例如我完整 DEMO 中的设计，滚动弹幕的 fontSize 固定只有两种，分别是：小：24px；标准：34px；
+![渲染效果](../assets/imgs/0002.png)
+:::
 
 ## 顶部底部弹幕
 ```ts

@@ -29,6 +29,22 @@ export type RendererOptions = {
   devConfig?: Partial<DevConfig>,
 }
 
+// 弹幕的配置看下一小节
+
+/**
+ * 弹幕中渲染图片的配置
+ */
+export type BarrageImage = {
+  // 弹幕图片的唯一标识
+  id: string;
+  // 图片的地址
+  url: string;
+  // 渲染时的宽
+  width: number;
+  // 渲染时的高
+  height: number;
+}
+
 /**
  * 弹幕渲染器渲染弹幕的配置
  */
@@ -67,8 +83,6 @@ export type DevConfig = {
   // 是否打印关键数据
   isLogKeyData: boolean;
 }
-
-// 弹幕的配置看下一小节
 ```
 
 # 弹幕渲染器提供的方法
