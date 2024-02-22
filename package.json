@@ -1,6 +1,7 @@
 {
   "name": "fly-barrage",
   "version": "2.0.0",
+  "description": "Fully functional and powerful web-based barrage library",
   "author": {
     "name": "fufei",
     "email": "2543736927@qq.com"
@@ -30,6 +31,11 @@
     "update-ow": "node scripts/update-ow.js"
   },
   "homepage": "https://github.com/feiafei27/fly-barrage",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feiafei27/fly-barrage.git"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@types/node": "^20.8.6",
