@@ -14,7 +14,7 @@ gitee 仓库：
 ```bash
 git clone https://gitee.com/fei_fei27/fly-barrage.git
 ```
-安装依赖，启动项目即可（node 版本尽量使用高版本的，我本地的版本是 v14.20.0）。
+安装依赖，启动项目即可（node 版本尽量使用高版本的，我本地的版本是 v18.19.0）。
 ```bash
 npm run dev
 ```
