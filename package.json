@@ -28,7 +28,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "release": "node scripts/release.js",
-    "update-ow": "node scripts/update-ow.js"
+    "push-remote": "node scripts/push-remote.js"
   },
   "homepage": "https://github.com/feiafei27/fly-barrage",
   "repository": {

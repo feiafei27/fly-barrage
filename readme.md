@@ -10,7 +10,7 @@ Fully functional and powerful web-based barrage library
 
 ## 📝 Official Website
 
-<https://fly-barrage.vercel.app/>
+<https://fly-barrage.netlify.app/>
 
 ## 📥 Install
 
