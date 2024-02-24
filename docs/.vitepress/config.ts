@@ -14,6 +14,10 @@ export default defineConfig({
             { text: '快速开始', link: '/guide/quick-start' },
             { text: '弹幕渲染器', link: '/guide/barrage-render-instance' },
             { text: '弹幕', link: '/guide/barrage' },
+            { text: '弹幕渲染图片', link: '/guide/barrage-image' },
+            { text: '渲染配置', link: '/guide/render-config' },
+            { text: '开发配置', link: '/guide/dev-config.md' },
+            { text: 'Canvas && 渲染上下文', link: '/guide/canvas-ctx.md' },
           ]
         }
       ],

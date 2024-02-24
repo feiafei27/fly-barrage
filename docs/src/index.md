@@ -9,6 +9,9 @@ hero:
     - theme: brand
       text: 快速开始
       link: /guide/quick-start
+    - theme: alt
+      text: blog 专栏
+      link: https://blog.csdn.net/f18855666661/category_12584727.html
 
 features:
   - title: 功能完善

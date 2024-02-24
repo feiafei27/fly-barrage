@@ -3,7 +3,7 @@
 npm install fly-barrage
 ```
 
-### 简单用法
+# 快速开始
 
 ::: code-group
 ```vue [template]
@@ -83,7 +83,7 @@ const videoPause = () => {
 ```
 :::
 
-### 完整用法渲染效果
+# 完整用法渲染效果
 ::: tip 提示
 完整用法源码请直接 clone 项目，安装依赖后，执行 npm run dev 即可看到。（node 版本尽量使用高版本的，我本地的版本是 v18.19.0）
 :::
