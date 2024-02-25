@@ -159,6 +159,7 @@ export function generateBarrageData(videoId: number, config: generateBarrageConf
     isFixed, isScroll, isSenior, isSpecial,
     fixedNum, scrollNum, seniorNum, specialNum,
   } = config;
+  console.log(videoId);
 
   const textSections = [
     `读书不觉已春深`,
