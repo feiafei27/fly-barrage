@@ -39,6 +39,11 @@ export default class BarrageRenderer {
 	// 记录上次布局计算时，container 的宽高
 	lastContainerSize = { width: 0, height: 0 };
 
+	// 离屏 canvas 优化
+	isSupportOffscreenCanvas = Utils.Canvas.isSupportOffscreenCanvas();
+	offscreenCanvas?: OffscreenCanvas;
+	offscreenCanvasCtx?: OffscreenCanvasRenderingContext2D;
+	
 	constructor({
 		container,
 		video,
@@ -64,6 +69,10 @@ export default class BarrageRenderer {
 			: container;
 		this.canvas = document.createElement('canvas');
 		this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+		if (this.isSupportOffscreenCanvas) {
+			this.offscreenCanvas = new OffscreenCanvas(100, 100);
+			this.offscreenCanvasCtx = this.offscreenCanvas.getContext('2d');
+		}
 		this.handleDOM(this.container, this.canvas, this.ctx);
 
 		// 设置弹幕数据
@@ -95,21 +104,33 @@ export default class BarrageRenderer {
 
 		// 将 canvas 添加到 container 中
 		container.appendChild(canvas);
-
-		// 处理 Canvas 在高分屏上渲染模糊的问题
+		
+		this.handleHighDprVague(canvas, ctx);
+		
+		// 需要同步处理离屏 canvas
+		if (this.isSupportOffscreenCanvas) {
+			this.offscreenCanvas.width = container.clientWidth;
+			this.offscreenCanvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
+		}
+	}
+	
+	/**
+	 * 处理 Canvas 在高分屏上渲染模糊的问题
+	 */
+	private handleHighDprVague(canvas: HTMLCanvasElement | OffscreenCanvas, ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
 		// 先获取设备 dpr
-		const dpr = Utils.Dpr.getDevicePixelRatio();
+		const dpr = Utils.Canvas.getDevicePixelRatio();
 		const logicalWidth = canvas.width;
 		const logicalHeight = canvas.height;
 		canvas.width = logicalWidth * dpr;
 		canvas.height = logicalHeight * dpr;
 		canvas.style.width = logicalWidth + 'px';
 		canvas.style.height = logicalHeight + 'px';
-
+		
 		ctx.scale(dpr, dpr);
 		ctx.textBaseline = 'hanging';
 	}
-
+	
 	/**
 	 * 发送新的弹幕
 	 * @param barrage 弹幕配置对象
@@ -250,7 +271,7 @@ export default class BarrageRenderer {
 
 		// 遍历弹幕实例进行渲染
 		renderBarrages.forEach(barrage => {
-			barrage.render(this.ctx);
+			barrage.render(this.offscreenCanvasCtx ?? this.ctx);
 		});
 
 		if (this.devConfig.isRenderFPS) this.renderFps();
@@ -294,7 +315,7 @@ export default class BarrageRenderer {
 	 * canvas 的尺寸
 	 */
 	get canvasSize() {
-		const dpr = Utils.Dpr.getDevicePixelRatio();
+		const dpr = Utils.Canvas.getDevicePixelRatio();
 		return {
 			width: this.canvas.width / dpr,
 			height: this.canvas.height / dpr,
