@@ -118,16 +118,14 @@ export default class BarrageRenderer {
 	 * 处理 Canvas 在高分屏上渲染模糊的问题
 	 */
 	private handleHighDprVague(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-		// 先获取设备 dpr
-		const dpr = Utils.Canvas.getDevicePixelRatio();
 		const logicalWidth = canvas.width;
 		const logicalHeight = canvas.height;
-		canvas.width = logicalWidth * dpr;
-		canvas.height = logicalHeight * dpr;
+		canvas.width = logicalWidth * this.dpr;
+		canvas.height = logicalHeight * this.dpr;
 		canvas.style.width = logicalWidth + 'px';
 		canvas.style.height = logicalHeight + 'px';
 		
-		ctx.scale(dpr, dpr);
+		ctx.scale(this.dpr, this.dpr);
 		ctx.textBaseline = 'hanging';
 	}
 	
@@ -321,10 +319,9 @@ export default class BarrageRenderer {
 	 * canvas 的尺寸
 	 */
 	get canvasSize() {
-		const dpr = Utils.Canvas.getDevicePixelRatio();
 		return {
-			width: this.canvas.width / dpr,
-			height: this.canvas.height / dpr,
+			width: this.canvas.width / this.dpr,
+			height: this.canvas.height / this.dpr,
 		};
 	}
 
