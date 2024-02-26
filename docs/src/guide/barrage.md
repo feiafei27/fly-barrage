@@ -3,7 +3,7 @@
 export type BarrageOptions = ScrollBarrageOptions | FixedBarrageOptions | SeniorBarrageOptions;
 ```
 
-## 所有弹幕共有的配置项
+# 所有弹幕共有的配置项
 ```ts
 export type BaseBarrageOptions = {
   // 弹幕的唯一标识
@@ -60,7 +60,7 @@ export type CustomRenderOptions = {
 }
 ```
 
-## 滚动弹幕
+# 滚动弹幕
 ```ts
 export type ScrollBarrageOptions = BaseBarrageOptions & {
   // 弹幕的类型
@@ -74,7 +74,7 @@ export type ScrollBarrageOptions = BaseBarrageOptions & {
 ![渲染效果](../assets/imgs/0002.png)
 :::
 
-## 顶部底部弹幕
+# 顶部底部弹幕
 ```ts
 export type FixedBarrageOptions = BaseBarrageOptions & {
   // 弹幕的类型
@@ -84,7 +84,7 @@ export type FixedBarrageOptions = BaseBarrageOptions & {
 }
 ```
 
-## 高级弹幕
+# 高级弹幕
 ```ts
 export type SeniorBarrageOptions = BaseBarrageOptions & {
   // 弹幕的类型

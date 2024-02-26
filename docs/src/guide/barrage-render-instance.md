@@ -86,29 +86,29 @@ export type DevConfig = {
 ```
 
 # 弹幕渲染器提供的方法
-## play()
+## play(): void;
 作用：执行弹幕的播放操作。
 
-## pause()
+## pause(): void;
 作用：暂停弹幕的播放。
 
-## switch(isOpen: boolean)
+## switch(isOpen: boolean): void;
 作用：控制是否打开弹幕。
 
-## setBarrages(barrages?: BarrageOptions[])
+## setBarrages(barrageOptions: BarrageOptions[]): void;
 作用：设置弹幕数据。
 
-## send(barrage: BarrageOptions)
+## send(barrage: BarrageOptions): void;
 作用：发送弹幕。
 
-## resize()
+## resize(): void;
 作用：container 元素尺寸变更后，canvas 元素以及弹幕的渲染也需要随之进行改变。
 
-## setRenderConfig(renderConfig: Partial\<RenderConfig\>)
+## setRenderConfig(renderConfig: Partial\<RenderConfig\>): void;
 作用：设置渲染配置。
 
-## setDevConfig(devConfig: Partial\<DevConfig\>)
+## setDevConfig(devConfig: Partial\<DevConfig\>): void;
 作用：设置开发配置。
 
-## renderFrame()
+## renderFrame(): void;
 作用：触发一帧的渲染
