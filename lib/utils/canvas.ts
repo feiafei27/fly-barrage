@@ -28,14 +28,6 @@ function getDevicePixelRatio() {
   return _pixelRatio;
 }
 
-/**
- * 判断当前浏览器是否支持离屏 canvas
- */
-function isSupportOffscreenCanvas() {
-  return typeof OffscreenCanvas !== 'undefined'
-}
-
 export default {
   getDevicePixelRatio,
-  isSupportOffscreenCanvas,
 }
