@@ -39,6 +39,12 @@ export default class BarrageRenderer {
 	// 记录上次布局计算时，container 的宽高
 	lastContainerSize = { width: 0, height: 0 };
 
+	// 离屏 canvas 优化
+	offscreenCanvas: HTMLCanvasElement;
+	offscreenCanvasCtx: CanvasRenderingContext2D;
+
+	dpr = Utils.Canvas.getDevicePixelRatio();
+	
 	constructor({
 		container,
 		video,
@@ -64,6 +70,10 @@ export default class BarrageRenderer {
 			: container;
 		this.canvas = document.createElement('canvas');
 		this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+
+		this.offscreenCanvas = document.createElement('canvas');
+		this.offscreenCanvasCtx = this.offscreenCanvas.getContext('2d') as CanvasRenderingContext2D;
+
 		this.handleDOM(this.container, this.canvas, this.ctx);
 
 		// 设置弹幕数据
@@ -95,21 +105,30 @@ export default class BarrageRenderer {
 
 		// 将 canvas 添加到 container 中
 		container.appendChild(canvas);
-
-		// 处理 Canvas 在高分屏上渲染模糊的问题
-		// 先获取设备 dpr
-		const dpr = Utils.Dpr.getDevicePixelRatio();
+		
+		this.handleHighDprVague(canvas, ctx);
+		
+		// 需要同步处理离屏 canvas
+		this.offscreenCanvas.width = container.clientWidth;
+		this.offscreenCanvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
+		this.handleHighDprVague(this.offscreenCanvas, this.offscreenCanvasCtx);
+	}
+	
+	/**
+	 * 处理 Canvas 在高分屏上渲染模糊的问题
+	 */
+	private handleHighDprVague(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 		const logicalWidth = canvas.width;
 		const logicalHeight = canvas.height;
-		canvas.width = logicalWidth * dpr;
-		canvas.height = logicalHeight * dpr;
+		canvas.width = logicalWidth * this.dpr;
+		canvas.height = logicalHeight * this.dpr;
 		canvas.style.width = logicalWidth + 'px';
 		canvas.style.height = logicalHeight + 'px';
-
-		ctx.scale(dpr, dpr);
+		
+		ctx.scale(this.dpr, this.dpr);
 		ctx.textBaseline = 'hanging';
 	}
-
+	
 	/**
 	 * 发送新的弹幕
 	 * @param barrage 弹幕配置对象
@@ -244,16 +263,22 @@ export default class BarrageRenderer {
 			renderBarrages = renderBarrages.filter(barrage => this.renderConfig.barrageFilter!(barrage));
 		}
 
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-		this.ctx.globalAlpha = this.renderConfig.opacity;
+		this.offscreenCanvasCtx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
+		this.offscreenCanvasCtx.globalAlpha = this.renderConfig.opacity;
 
 		// 遍历弹幕实例进行渲染
 		renderBarrages.forEach(barrage => {
-			barrage.render(this.ctx);
+			barrage.render(this.offscreenCanvasCtx);
 		});
 
 		if (this.devConfig.isRenderFPS) this.renderFps();
+
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.offscreenCanvas.width && this.ctx.drawImage(
+			this.offscreenCanvas,
+			0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height,
+			0, 0, this.canvas.width / this.dpr, this.canvas.height / this.dpr,
+		);
 
 		// 执行下一帧
 		if (this.animationHandle) {
@@ -294,10 +319,9 @@ export default class BarrageRenderer {
 	 * canvas 的尺寸
 	 */
 	get canvasSize() {
-		const dpr = Utils.Dpr.getDevicePixelRatio();
 		return {
-			width: this.canvas.width / dpr,
-			height: this.canvas.height / dpr,
+			width: this.canvas.width / this.dpr,
+			height: this.canvas.height / this.dpr,
 		};
 	}
 
@@ -356,9 +380,9 @@ export default class BarrageRenderer {
 		this.lastFrameTime = now;
 
 		if (this.fps) {
-			this.ctx.font = 'bold 32px Microsoft YaHei';
-			this.ctx.fillStyle = 'blue';
-			this.ctx.fillText(this.fps, 20, 30);
+			this.offscreenCanvasCtx.font = 'bold 32px Microsoft YaHei';
+			this.offscreenCanvasCtx.fillStyle = 'blue';
+			this.offscreenCanvasCtx.fillText(this.fps, 20, 30);
 		}
 	}
 
