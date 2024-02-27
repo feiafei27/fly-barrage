@@ -1,26 +1,24 @@
 # ✨ Fly Barrage
 
-Fully functional and powerful web-based barrage library
-
 功能完善，强大的 web 端弹幕库
 
-## 🎥 Rendering effects
+## 🎥 渲染效果
 
 ![渲染效果](./public/imgs/0001.png)
 
-## 📝 Official Website
+## 📝 官方网站
 
 <https://fly-barrage.netlify.app/>
 
-## 📥 Install
+## 📥 安装
 
 ```bash
 npm install fly-barrage
 ```
 
-## 🌍 Usage
+## 🌍 用法
 ```vue
-<!-- Taking Vue framework as an example, this library is not limited to specific frameworks. -->
+<!-- 这里使用 Vue 框架作为例子，本库并不局限于特定框架 -->
 <template>
     <div id="container">
         <video
@@ -90,9 +88,9 @@ npm install fly-barrage
   }
 </style>
 ```
-For complete usage, please clone the project directly, install the dependencies, and then execute npm run dev to view the complete usage
+完整用法，请直接 clone 项目，安装依赖后，执行 npm run dev 即可看到完整用法
 
-Try to use a higher version of the node version, my local version is v18.19.0
+尽量使用高版本 node，我本地的版本是 v18.19.0
 
 ## 🌲 License
 [MIT License](LICENSE)
