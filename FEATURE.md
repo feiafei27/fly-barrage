@@ -9,3 +9,7 @@
 
 ### feature-4 branch
 - 拓展弹幕的 color；
+
+### feature-5 branch
+- API 完善弹幕字体更多配置项；
+- DEMO 支持完整的字体配置项；
