@@ -13,3 +13,6 @@
 ### feature-5 branch
 - API 完善弹幕字体更多配置项；
 - DEMO 支持完整的字体配置项；
+
+### feature-6 branch
+- 支持定义显示多少行弹幕；
