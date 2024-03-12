@@ -1,8 +1,21 @@
-# ✨ Fly Barrage
+## ✨ Fly Barrage
 
 Fully functional and powerful web-based barrage library
 
-## 🎥 Rendering effects
+## 🎉 All of my open source libraries
+> fly-barrage: Web based barrage library, recommended by Gitee.
+>
+> gitee: https://gitee.com/fei_fei27/fly-barrage;
+>
+> github: https://github.com/feiafei27/fly-barrage;
+
+> fly-gesture-unlock: Web based gesture unlocking library.
+>
+> gitee: https://gitee.com/fei_fei27/fly-gesture-unlock;
+>
+> github: https://github.com/feiafei27/fly-gesture-unlock;
+
+## 🎥 Rendering Effects
 
 ![Rendering effects](./public/imgs/0001.png)
 

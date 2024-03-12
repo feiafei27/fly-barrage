@@ -1,6 +1,19 @@
-# ✨ Fly Barrage
+## ✨ Fly Barrage
 
 功能完善，强大的 web 端弹幕库
+
+## 🎉 我的所有开源库
+> fly-barrage: web 端弹幕库，gitee 推荐项目。
+>
+> gitee: https://gitee.com/fei_fei27/fly-barrage;
+>
+> github: https://github.com/feiafei27/fly-barrage;
+
+> fly-gesture-unlock: web 端手势解锁库。
+>
+> gitee: https://gitee.com/fei_fei27/fly-gesture-unlock;
+>
+> github: https://github.com/feiafei27/fly-gesture-unlock;
 
 ## 🎥 渲染效果
 
