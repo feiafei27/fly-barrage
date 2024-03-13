@@ -23,6 +23,10 @@ Fully functional and powerful web-based barrage library
 
 <https://fly-barrage.netlify.app/>
 
+## 🎄 Online Experience
+
+<https://codesandbox.io/p/github/feiafei27/fly-barrage/master?embed=1&import=true>
+
 ## 📥 Install
 
 ```bash

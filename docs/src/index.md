@@ -12,6 +12,9 @@ hero:
     - theme: alt
       text: blog 专栏
       link: https://blog.csdn.net/f18855666661/category_12584727.html
+    - theme: alt
+      text: 在线体验
+      link: https://codesandbox.io/p/github/feiafei27/fly-barrage/master?embed=1&import=true
 
 features:
   - title: 功能完善

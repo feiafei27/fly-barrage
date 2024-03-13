@@ -23,6 +23,10 @@
 
 <https://fly-barrage.netlify.app/>
 
+## 🎄 在线体验
+
+<https://codesandbox.io/p/github/feiafei27/fly-barrage/master?embed=1&import=true>
+
 ## 📥 安装
 
 ```bash
