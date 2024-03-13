@@ -18,10 +18,27 @@ export default class BarrageRenderer {
 	ctx: CanvasRenderingContext2D;
 	// 弹幕中渲染图片的配置
 	barrageImages?: BarrageImage[];
+	// 默认渲染配置
+	defaultRenderConfig: RenderConfig = {
+		heightReduce: 0,
+		speed: 200,
+		opacity: 1,
+		renderRegion: 1,
+		fontFamily: 'Microsoft YaHei',
+		fontWeight: 'normal',
+		avoidOverlap: true,
+		minSpace: 10,
+	}
 	// 渲染配置
-	renderConfig!: RenderConfig;
+	renderConfig: RenderConfig = this.defaultRenderConfig;
+	// 默认开发配置
+	defaultDevConfig: DevConfig = {
+		isRenderFPS: false,
+		isRenderBarrageBorder: false,
+		isLogKeyData: false,
+	}
 	// 开发相关配置
-	devConfig!: DevConfig;
+	devConfig: DevConfig = this.defaultDevConfig;
 	// 弹幕布局计算器
 	barrageLayoutCalculate = new BarrageLayoutCalculate({
 		barrageRenderer: this,
@@ -202,8 +219,6 @@ export default class BarrageRenderer {
 	 * @param init 是不是初始化
 	 */
 	private setRenderConfigInternal(renderConfig: Partial<RenderConfig>, init = false) {
-		if (!this.renderConfig) this.renderConfig = DEFAULT_RENDER_CONFIG;
-
 		const renderConfigKeys = Object.keys(renderConfig);
 		const isSpeedChange = renderConfigKeys.includes('speed') && renderConfig.speed !== this.renderConfig.speed;
 		const isHeightReduceChange = renderConfigKeys.includes('heightReduce') && renderConfig.heightReduce !== this.renderConfig.heightReduce;
@@ -243,7 +258,6 @@ export default class BarrageRenderer {
 	 * @param devConfig 开发配置
 	 */
 	setDevConfig(devConfig: Partial<DevConfig>) {
-		if (!this.devConfig) this.devConfig = DEFAULT_DEV_CONFIG;
 		Object.assign(this.devConfig, devConfig);
 	}
 
@@ -479,20 +493,6 @@ export type RenderConfig = {
 }
 
 /**
- * 默认渲染配置
- */
-const DEFAULT_RENDER_CONFIG: RenderConfig = {
-	heightReduce: 0,
-	speed: 200,
-	opacity: 1,
-	renderRegion: 1,
-	fontFamily: 'Microsoft YaHei',
-	fontWeight: 'normal',
-	avoidOverlap: true,
-	minSpace: 10,
-}
-
-/**
  * 弹幕中渲染图片的配置
  */
 export type BarrageImage = {
@@ -516,15 +516,6 @@ export type DevConfig = {
 	isRenderBarrageBorder: boolean;
 	// 是否打印关键数据
 	isLogKeyData: boolean;
-}
-
-/**
- * 默认开发配置
- */
-const DEFAULT_DEV_CONFIG: DevConfig = {
-	isRenderFPS: false,
-	isRenderBarrageBorder: false,
-	isLogKeyData: false,
 }
 
 export {
