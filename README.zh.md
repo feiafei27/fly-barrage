@@ -25,7 +25,7 @@
 
 ## 🎄 在线体验
 
-<https://codesandbox.io/p/github/feiafei27/fly-barrage/master?embed=1&import=true>
+<https://fly-barrage-online.netlify.app/>
 
 ## 📥 安装
 

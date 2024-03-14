@@ -25,7 +25,7 @@ Fully functional and powerful web-based barrage library
 
 ## 🎄 Online Experience
 
-<https://codesandbox.io/p/github/feiafei27/fly-barrage/master?embed=1&import=true>
+<https://fly-barrage-online.netlify.app/>
 
 ## 📥 Install
 
