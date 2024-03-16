@@ -2,6 +2,10 @@
 
 Fully functional and powerful web-based barrage library
 
+![npm](https://img.shields.io/npm/l/fly-barrage.svg)
+![npm](https://img.shields.io/npm/dt/fly-barrage.svg)
+![npm](https://img.shields.io/npm/v/fly-barrage/latest.svg)
+
 ## 🎉 All of my open source libraries
 > fly-barrage: Web based barrage library, recommended by Gitee.
 >
