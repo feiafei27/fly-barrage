@@ -402,7 +402,7 @@ const currentGroup = computed(() => imageGroupsRef.value.find(group => group.id 
 
 onMounted(() => {
   // 蒙版相关
-  const {beforeFrameRender} = usePortraitUnobstructed(video);
+  const {beforeFrameRender} = usePortraitUnobstructed(video, currentVideoItem);
 
   barrageRenderer.value = new BarrageRenderer({
     container: 'container',
@@ -482,7 +482,7 @@ const {speeds, currentSpeed, speedChange} = useSpeed(barrageRenderer);
 const {avoidOverlap, avoidOverlapChange} = useAvoidOverlap(barrageRenderer);
 
 // 视频切换
-const {videos, currentVideo, videoSrc, changeNextVideo} = useVideoChange();
+const {videos, currentVideo, currentVideoItem, videoSrc, changeNextVideo} = useVideoChange();
 
 // 获取新的弹幕并 set
 const generateBarrageDataSet = () => {

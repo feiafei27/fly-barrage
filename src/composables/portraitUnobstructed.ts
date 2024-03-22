@@ -1,8 +1,9 @@
 import { Ref } from 'vue';
 import { FrameRenderHook } from '../../lib';
+import { VideoItem } from './videoChange';
 import _ from 'lodash';
 
-export default function usePortraitUnobstructed(video: Ref<HTMLVideoElement>) {
+export default function usePortraitUnobstructed(video: Ref<HTMLVideoElement>, currentVideoItem: Ref<VideoItem | undefined>) {
   // 创建一个 canvas 用于抓取 video 每一帧的数据
   const grabCanvas = document.createElement('canvas');
   grabCanvas.width = video.value.clientWidth * 1.5;
@@ -11,26 +12,30 @@ export default function usePortraitUnobstructed(video: Ref<HTMLVideoElement>) {
 
   // 每一帧渲染前，计算出蒙版并设置进去
   const beforeFrameRender: FrameRenderHook = ({ br }) => {
-    grabCtx.drawImage(video.value, 0, 0, grabCanvas.width, grabCanvas.height);
-    // 获取这一帧的 ImageData
-    const imageData = grabCtx.getImageData(0, 0, grabCanvas.width, grabCanvas.height);
-    // 像素数量
-    const pixelCount = imageData.data.length / 4;
-    const imageDataArray = imageData.data;
-    // 修改 imageData，得到我们想要的蒙版
-    for (let i = 0; i < pixelCount; i++) {
-      // 这里不用 ES6 解构赋值的写法，主要为了保证计算性能
-      const r = imageDataArray[i * 4];
-      const g = imageDataArray[i * 4 + 1];
-      const b = imageDataArray[i * 4 + 2];
+    if (!currentVideoItem.value?.isUnobstructed) {
+      br.setMask();
+    } else {
+      grabCtx.drawImage(video.value, 0, 0, grabCanvas.width, grabCanvas.height);
+      // 获取这一帧的 ImageData
+      const imageData = grabCtx.getImageData(0, 0, grabCanvas.width, grabCanvas.height);
+      // 像素数量
+      const pixelCount = imageData.data.length / 4;
+      const imageDataArray = imageData.data;
+      // 修改 imageData，得到我们想要的蒙版
+      for (let i = 0; i < pixelCount; i++) {
+        // 这里不用 ES6 解构赋值的写法，主要为了保证计算性能
+        const r = imageDataArray[i * 4];
+        const g = imageDataArray[i * 4 + 1];
+        const b = imageDataArray[i * 4 + 2];
 
-      // 将非绿色区域设为透明
-      if (r === 0 && g === 255 && b === 0) {
-        imageDataArray[4 * i + 3] = 0;
+        // 将非绿色区域设为透明
+        if (r === 0 && g === 255 && b === 0) {
+          imageDataArray[4 * i + 3] = 0;
+        }
       }
-    }
 
-    br.setMask(imageData);
+      br.setMask(imageData);
+    }
   }
 
   return {
