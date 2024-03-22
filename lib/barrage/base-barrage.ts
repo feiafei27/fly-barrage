@@ -224,6 +224,13 @@ export default abstract class BaseBarrage {
    * @param ctx 渲染上下文
    */
   render(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
+    // 每个弹幕渲染前
+    this.br.beforeBarrageRender && this.br.beforeBarrageRender({
+      ctx,
+      br: this.br,
+      barrage: this,
+    });
+
     // 如果当前弹幕是自定义渲染弹幕的话，则触发执行自定义渲染函数
     if (this.customRender) {
       this.customRender.renderFn({
@@ -257,6 +264,13 @@ export default abstract class BaseBarrage {
       ctx.strokeStyle = '#89D5FF';
       ctx.strokeRect(this.left, this.top, this.width, this.height);
     }
+
+    // 每个弹幕渲染后
+    this.br.afterBarrageRender && this.br.afterBarrageRender({
+      ctx,
+      br: this.br,
+      barrage: this,
+    });
   }
 
   /**

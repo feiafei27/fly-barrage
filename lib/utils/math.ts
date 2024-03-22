@@ -1,7 +1,7 @@
 /**
  * 数字数字求和
  */
-function sum(nums: number[]) {
+const sum = (nums: number[]) => {
   let res = 0;
   nums.forEach(num => res += num);
   return res;
@@ -10,7 +10,7 @@ function sum(nums: number[]) {
 /**
  * 求数字数组的众数，如果有多个众数的话，返回最小的
  */
-function findMode(arr: number[]): number | null {
+const findMode = (arr: number[]): number | null => {
   if (arr.length === 0) {
     return null;
   }
@@ -35,7 +35,7 @@ function findMode(arr: number[]): number | null {
 /**
  * 获取随机的整数
  */
-function getRandomInt(min: number, max: number) {
+const getRandomInt = (min: number, max: number) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;

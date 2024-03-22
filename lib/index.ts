@@ -61,7 +61,23 @@ export default class BarrageRenderer {
 	offscreenCanvasCtx: CanvasRenderingContext2D;
 
 	dpr = Utils.Canvas.getDevicePixelRatio();
-	
+
+	// 一系列钩子函数
+	// 每一帧渲染前的钩子函数
+	beforeFrameRender?: FrameRenderHook;
+	// 每一帧渲染后的钩子函数
+	afterFrameRender?: FrameRenderHook;
+	// 每个弹幕渲染前的钩子函数
+	beforeBarrageRender?: BarrageRenderHook;
+	// 每个弹幕渲染后的钩子函数
+	afterBarrageRender?: BarrageRenderHook;
+
+	// 蒙版数据，如果蒙版数据存在的话，每一帧的渲染中都会用到，用于实现人像免遮挡
+	mask: Mask = {
+		type: null,
+		data: null,
+	};
+
 	constructor({
 		container,
 		video,
@@ -69,6 +85,11 @@ export default class BarrageRenderer {
 		barrageImages,
 		renderConfig,
 		devConfig,
+		beforeFrameRender,
+		afterFrameRender,
+		beforeBarrageRender,
+		afterBarrageRender,
+		mask,
 	}: RendererOptions) {
 		this.video = video;
 
@@ -95,6 +116,15 @@ export default class BarrageRenderer {
 
 		// 设置弹幕数据
 		this.setBarrages(barrages);
+
+		// 设置钩子函数
+		this.beforeFrameRender = beforeFrameRender;
+		this.afterFrameRender = afterFrameRender;
+		this.beforeBarrageRender = beforeBarrageRender;
+		this.afterBarrageRender = afterBarrageRender;
+
+		// 设置蒙版数据
+		this.setMask(mask);
 
 		this.devConfig.isLogKeyData && console.log('全局实例：', this);
 	}
@@ -134,7 +164,7 @@ export default class BarrageRenderer {
 	/**
 	 * 处理 Canvas 在高分屏上渲染模糊的问题
 	 */
-	private handleHighDprVague(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+	handleHighDprVague(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 		const logicalWidth = canvas.width;
 		const logicalHeight = canvas.height;
 		canvas.width = logicalWidth * this.dpr;
@@ -278,8 +308,15 @@ export default class BarrageRenderer {
 		}
 
 		this.offscreenCanvasCtx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
-		this.offscreenCanvasCtx.globalAlpha = this.renderConfig.opacity;
 
+		// 每一帧渲染前
+		this.beforeFrameRender && this.beforeFrameRender({
+			ctx: this.offscreenCanvasCtx,
+			br: this,
+		});
+
+		this.offscreenCanvasCtx.save();
+		this.offscreenCanvasCtx.globalAlpha = this.renderConfig.opacity;
 		// 遍历弹幕实例进行渲染
 		renderBarrages.forEach(barrage => {
 			barrage.render(this.offscreenCanvasCtx);
@@ -287,12 +324,44 @@ export default class BarrageRenderer {
 
 		if (this.devConfig.isRenderFPS) this.renderFps();
 
+		this.offscreenCanvasCtx.restore();
+		// 每一帧渲染后
+		this.afterFrameRender && this.afterFrameRender({
+			ctx: this.offscreenCanvasCtx,
+			br: this,
+		});
+
+		// 将离屏中的绘图绘制到 ctx 中
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.offscreenCanvas.width && this.ctx.drawImage(
+		this.ctx.save();
+		// 进行蒙版的绘制
+		if (this.mask.data) {
+			const { type, data } = this.mask;
+			// 根据蒙版的类型进行不同的处理
+			if (type === 'URL') {
+				this.ctx.drawImage(
+					data,
+					0,
+					0,
+					this.canvas.width,
+					this.canvas.height,
+				);
+			} else if (type === 'ImageData') {
+				this.ctx.putImageData(
+					data,
+					0,
+					0,
+				);
+			}
+			this.ctx.globalCompositeOperation = 'source-out';
+		}
+
+		this.ctx.drawImage(
 			this.offscreenCanvas,
 			0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height,
 			0, 0, this.canvas.width / this.dpr, this.canvas.height / this.dpr,
 		);
+		this.ctx.restore();
 
 		// 执行下一帧
 		if (this.animationHandle) {
@@ -380,6 +449,25 @@ export default class BarrageRenderer {
 	}
 
 	/**
+	 * 设置蒙版数据
+	 * @param mask 图片的 url 或者 ImageData 数据
+	 */
+	setMask(mask?: string | ImageData) {
+		if (typeof mask === 'string') {
+			this.mask.type = 'URL';
+			Utils.Cache.loadImage(mask).then(img => {
+				this.mask.data = img;
+			});
+		} else if (mask instanceof ImageData) {
+			this.mask.type = 'ImageData';
+			this.mask.data = mask;
+		} else {
+			this.mask.type = null;
+			this.mask.data = null;
+		}
+	}
+
+	/**
 	 * 渲染 FPS
 	 */
 	private renderFps() {
@@ -460,11 +548,56 @@ export type RendererOptions = {
 	barrages?: BarrageOptions[];
 	// 弹幕中渲染图片的配置
 	barrageImages?: BarrageImage[];
+
 	// 渲染相关配置
 	renderConfig?: Partial<RenderConfig>;
 	// 开发相关配置
 	devConfig?: Partial<DevConfig>,
+
+	// 一系列钩子函数
+	// 每一帧渲染前的钩子函数
+	beforeFrameRender?: FrameRenderHook;
+	// 每一帧渲染后的钩子函数
+	afterFrameRender?: FrameRenderHook;
+	// 每个弹幕渲染前的钩子函数
+	beforeBarrageRender?: BarrageRenderHook;
+	// 每个弹幕渲染后的钩子函数
+	afterBarrageRender?: BarrageRenderHook;
+
+	// 蒙版数据
+	mask?: string | ImageData;
 }
+
+/**
+ * 蒙版数据类型
+ */
+type Mask = {
+	type: 'URL';
+	data: HTMLImageElement;
+} | {
+	type: 'ImageData';
+	data: ImageData;
+} | {
+	type: null;
+	data: null;
+};
+
+/**
+ * 帧渲染钩子函数的类型
+ */
+export type FrameRenderHook = (data: {
+	ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+	br: BarrageRenderer,
+}) => void;
+
+/**
+ * 弹幕渲染钩子函数的类型
+ */
+export type BarrageRenderHook = (data: {
+	ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+	br: BarrageRenderer,
+	barrage: BaseBarrage,
+}) => void;
 
 /**
  * 弹幕渲染器渲染弹幕的配置

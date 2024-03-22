@@ -5,7 +5,7 @@ import { BaseBarrage } from '../barrage'
  * @param barrages 弹幕数组
  * @param barrage 需要插入的弹幕
  */
-function insertBarrageByTime(barrages: BaseBarrage[], barrage: BaseBarrage) {
+const insertBarrageByTime = (barrages: BaseBarrage[], barrage: BaseBarrage) => {
   let left = 0;
   let right = barrages.length - 1;
 

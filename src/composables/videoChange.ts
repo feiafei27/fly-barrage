@@ -5,8 +5,9 @@ export default function useVideoChange() {
   const videos = ref([
     {id: 1, name: '花好月圆会', url: originPath + '/videos/demo1.mp4'},
     {id: 2, name: 'That\'s What I Like', url: originPath + '/videos/demo2.mp4'},
+    {id: 3, name: '书记舞', url: originPath + '/videos/demo3.mp4'},
   ]);
-  const currentVideo = ref(1);
+  const currentVideo = ref(3);
   const videoSrc = computed(() => videos.value.find(item => item.id === currentVideo.value)?.url);
   const changeNextVideo = () => {
     // 获取当前播放的视频 index

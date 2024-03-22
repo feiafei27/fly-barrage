@@ -386,7 +386,8 @@ import { barrageImages, ImageGroups, imageGroups, generateBarrageData } from './
 import {
   useBarrageOpen, useDisable, useResize,
   useOpacity, useRenderRegion, useSpeed,
-  useAvoidOverlap, useVideoChange, useSendBarrage
+  useAvoidOverlap, useVideoChange, useSendBarrage,
+  usePortraitUnobstructed,
 } from './composables';
 
 const barrageRenderer = ref<BarrageRenderer>();
@@ -400,6 +401,9 @@ const currentGroupId = ref(2);
 const currentGroup = computed(() => imageGroupsRef.value.find(group => group.id === currentGroupId.value)!);
 
 onMounted(() => {
+  // 蒙版相关
+  const {beforeFrameRender} = usePortraitUnobstructed(video);
+
   barrageRenderer.value = new BarrageRenderer({
     container: 'container',
     video: video.value,
@@ -426,7 +430,8 @@ onMounted(() => {
       isRenderFPS: true,
       isRenderBarrageBorder: false,
       isLogKeyData: true
-    }
+    },
+    beforeFrameRender,
   });
 
   generateBarrageDataSet();
@@ -489,7 +494,7 @@ const generateBarrageDataSet = () => {
     isSpecial: true,
 
     fixedNum: 100,
-    scrollNum: 300,
+    scrollNum: 600,
     seniorNum: 0,
     specialNum: 200,
   });

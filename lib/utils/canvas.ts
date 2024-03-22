@@ -1,7 +1,7 @@
 /**
  * 获取当前设备的 dpr
  */
-function getDevicePixelRatio() {
+const getDevicePixelRatio = () => {
   // 先创建一个 canvas 元素
   let canvas = document.createElement('canvas') as HTMLCanvasElement;
   // 获取绘图环境
