@@ -2,10 +2,6 @@
 
 功能完善，强大的 web 端弹幕库
 
-![npm](https://img.shields.io/npm/l/fly-barrage.svg)
-![npm](https://img.shields.io/npm/dt/fly-barrage.svg)
-![npm](https://img.shields.io/npm/v/fly-barrage/latest.svg)
-
 ## 🎉 我的所有开源库
 > fly-barrage: web 端弹幕库，gitee 推荐项目。
 >
