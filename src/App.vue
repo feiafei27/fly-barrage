@@ -380,7 +380,7 @@
 
 <script setup lang="ts">
 import BarrageRenderer, { BaseBarrage } from '../lib';
-import { onMounted, ref, computed, watch } from 'vue';
+import { onMounted, ref, computed, watch, Ref } from 'vue';
 
 import { barrageImages, ImageGroups, imageGroups, generateBarrageData } from './data';
 import {
@@ -401,9 +401,7 @@ const currentGroupId = ref(2);
 const currentGroup = computed(() => imageGroupsRef.value.find(group => group.id === currentGroupId.value)!);
 
 onMounted(() => {
-  // 蒙版相关
-  const {beforeFrameRender} = usePortraitUnobstructed(video, currentVideoItem);
-
+  // 创建 BarrageRenderer 实例
   barrageRenderer.value = new BarrageRenderer({
     container: 'container',
     video: video.value,
@@ -431,8 +429,13 @@ onMounted(() => {
       isRenderBarrageBorder: false,
       isLogKeyData: true
     },
-    beforeFrameRender,
   });
+
+  // 蒙版相关
+  const { beforeFrameRender } = usePortraitUnobstructed(video, currentVideoItem, barrageRenderer as Ref<BarrageRenderer>);
+
+  // 设置 beforeFrameRender hook 函数
+  barrageRenderer.value.beforeFrameRender = beforeFrameRender;
 
   generateBarrageDataSet();
 });
@@ -494,7 +497,7 @@ const generateBarrageDataSet = () => {
     isSpecial: true,
 
     fixedNum: 100,
-    scrollNum: 600,
+    scrollNum: 300,
     seniorNum: 0,
     specialNum: 200,
   });

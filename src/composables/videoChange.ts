@@ -17,7 +17,7 @@ export default function useVideoChange() {
   const videos = ref<VideoItem[]>([
     {id: 1, name: '花好月圆会', isUnobstructed: false, url: originPath + '/videos/demo1.mp4'},
     {id: 2, name: 'That\'s What I Like', isUnobstructed: false, url: originPath + '/videos/demo2.mp4'},
-    {id: 3, name: '书记舞', isUnobstructed: true, url: originPath + '/videos/demo3.mp4'},
+    {id: 3, name: '书记舞（人像防挡）', isUnobstructed: true, url: originPath + '/videos/demo3.mp4'},
   ]);
   // 当前播放视频的 id
   const currentVideo = ref(3);
