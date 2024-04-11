@@ -69,6 +69,7 @@ export default function useSendBarrage(barrageRenderer: Ref<BarrageRenderer | un
         duration: 6000,
       };
     }
+    barrage.prior = true;
     barrageRenderer.value?.send(barrage);
     barrageText.value = '';
   }
@@ -84,6 +85,7 @@ export default function useSendBarrage(barrageRenderer: Ref<BarrageRenderer | un
       lineHeight: 1.2,
       color: currentBarrageColor.value,
     };
+    barrage.prior = true;
     barrageRenderer.value?.send(barrage);
   }
 
@@ -129,6 +131,7 @@ export default function useSendBarrage(barrageRenderer: Ref<BarrageRenderer | un
       seniorBarrageConfig: seniorBarrageConfig.value,
     }
     try {
+      barrage.prior = true;
       barrageRenderer.value?.send(barrage);
       barrageText.value = '';
     } catch (e: any) {
@@ -193,6 +196,7 @@ export default function useSendBarrage(barrageRenderer: Ref<BarrageRenderer | un
       },
     }
     try {
+      barrage.prior = true;
       barrageRenderer.value?.send(barrage);
       barrageText.value = '';
     } catch (e: any) {
