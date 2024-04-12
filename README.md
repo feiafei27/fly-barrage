@@ -2,6 +2,8 @@
 
 Fully functional and powerful web-based barrage library
 
+> In the ongoing maintenance of the project, if there is a good idea, please feel free to raise an issue, and I will do my best to support it 🤝；
+
 ## 🎉 All of my open source libraries
 > fly-barrage: Web based barrage library, recommended by Gitee.
 >
