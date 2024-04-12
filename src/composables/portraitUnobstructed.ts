@@ -10,21 +10,34 @@ export default function usePortraitUnobstructed(
 ) {
   // 创建一个 canvas 用于抓取 video 每一帧的数据
   const grabCanvas = document.createElement('canvas');
-  grabCanvas.width = video.value.clientWidth * barrageRenderer.value.dpr;
-  grabCanvas.height = video.value.clientHeight * barrageRenderer.value.dpr;
-  const grabCtx = grabCanvas.getContext('2d') as CanvasRenderingContext2D;
+  const grabCtx = grabCanvas.getContext('2d', {
+    willReadFrequently: true
+  }) as CanvasRenderingContext2D;
+
+  new ResizeObserver(_.throttle(() => {
+    if (!video.value) return;
+    grabCanvas.width = video.value.clientWidth;
+    grabCanvas.height = video.value.clientHeight;
+    barrageRenderer.value.handleHighDprVague(grabCanvas, grabCtx);
+  }, 100)).observe(document.getElementById('container')!);
 
   // 每一帧渲染前，计算出蒙版并设置进去
   const beforeFrameRender: FrameRenderHook = ({ br }) => {
     if (currentVideoItem.value?.isUnobstructed) {
+      if (!video.value) return;
       const { videoRenderWidth, videoRenderHeight, isWidthSame } = videoRenderSize(
         video.value.clientWidth,
         video.value.clientHeight,
         video.value.videoWidth / video.value.videoHeight
       );
-      // console.log({ videoRenderWidth, videoRenderHeight, isWidthSame });
 
-      grabCtx.drawImage(video.value, 0, 0, grabCanvas.width, grabCanvas.height);
+      grabCtx.drawImage(
+        video.value, 
+        !isWidthSame ? (grabCanvas.width / barrageRenderer.value.dpr - videoRenderWidth) / 2 : 0, 
+        isWidthSame ? (grabCanvas.height / barrageRenderer.value.dpr - videoRenderHeight) / 2 : 0, 
+        videoRenderWidth, 
+        videoRenderHeight
+      );
       // 获取这一帧的 ImageData
       const imageData = grabCtx.getImageData(0, 0, grabCanvas.width, grabCanvas.height);
       // 像素数量
@@ -32,13 +45,7 @@ export default function usePortraitUnobstructed(
       const imageDataArray = imageData.data;
       // 修改 imageData，得到我们想要的蒙版
       for (let i = 0; i < pixelCount; i++) {
-        // 这里不用 ES6 解构赋值的写法，主要为了保证计算性能
-        const r = imageDataArray[i * 4];
-        const g = imageDataArray[i * 4 + 1];
-        const b = imageDataArray[i * 4 + 2];
-
-        // 将非绿色区域设为透明
-        if (r === 0 && g === 255 && b === 0) {
+        if (imageDataArray[i * 4 + 1] === 255) {
           imageDataArray[4 * i + 3] = 0;
         }
       }
