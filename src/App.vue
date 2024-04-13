@@ -420,6 +420,31 @@ onMounted(() => {
         if (shieldWords.value.some(word => barrage.text.includes(word))) return false;
         // 其他情况，不过滤
         return true;
+      },
+      priorBorderCustomRender: ({ ctx, barrage }) => {
+        ctx.save();
+
+        // 设定矩形左上角的偏移量
+        const leftOffset = 6;
+        const topOffset = 2;
+        const { left, top, width, height } = barrage;
+        // 设置圆角矩形路径
+        ctx.roundRect(
+          left - leftOffset,
+          top - topOffset, 
+          width + 2 * leftOffset,
+          height + 2 * topOffset,
+          10
+        );
+        // 绘制边框
+        ctx.strokeStyle = '#89D5FF';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        // 绘制背景色
+        ctx.fillStyle = 'rgba(137, 213, 255, 0.3)'
+        ctx.fill();
+
+        ctx.restore();
       }
     },
     devConfig: {
