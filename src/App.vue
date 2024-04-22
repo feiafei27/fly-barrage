@@ -100,12 +100,14 @@
                 class="barrage-switch"
                 @change="avoidOverlapChange"
               />
-              <div class="setting-type" style="margin-top: 10px;">人像防挡</div>
-              <el-switch
-                v-model="isOpenPortraitUnobstructed"
-                class="barrage-switch"
-                @change="renderFrame"
-              />
+              <template v-if="currentVideoItem?.isUnobstructed">
+                <div class="setting-type" style="margin-top: 10px;">人像防挡</div>
+                <el-switch
+                  v-model="isOpenPortraitUnobstructed"
+                  class="barrage-switch"
+                  @change="renderFrame"
+                />
+              </template>
             </div>
             <template #reference>
               <el-icon :size="25" style="cursor: pointer;">
@@ -435,10 +437,8 @@ onMounted(() => {
       isRenderBarrageBorder: false,
       isLogKeyData: true
     },
+    beforeFrameRender,
   });
-
-  // 设置 beforeFrameRender hook 函数
-  barrageRenderer.value.beforeFrameRender = beforeFrameRender;
 
   generateBarrageDataSet();
 });
