@@ -1,4 +1,4 @@
-import { Ref } from 'vue';
+import { Ref, ref, onMounted } from 'vue';
 import BarrageRenderer, { FrameRenderHook } from '../../lib';
 import { VideoItem } from './videoChange';
 import _ from 'lodash';
@@ -8,22 +8,25 @@ export default function usePortraitUnobstructed(
   currentVideoItem: Ref<VideoItem | undefined>,
   barrageRenderer: Ref<BarrageRenderer>
 ) {
+  onMounted(() => {
+    new ResizeObserver(_.throttle(() => {
+      if (!video.value) return;
+      grabCanvas.width = video.value.clientWidth;
+      grabCanvas.height = video.value.clientHeight;
+      barrageRenderer.value.handleHighDprVague(grabCanvas, grabCtx);
+    }, 100)).observe(document.getElementById('container')!);
+  })
   // 创建一个 canvas 用于抓取 video 每一帧的数据
   const grabCanvas = document.createElement('canvas');
   const grabCtx = grabCanvas.getContext('2d', {
     willReadFrequently: true
   }) as CanvasRenderingContext2D;
 
-  new ResizeObserver(_.throttle(() => {
-    if (!video.value) return;
-    grabCanvas.width = video.value.clientWidth;
-    grabCanvas.height = video.value.clientHeight;
-    barrageRenderer.value.handleHighDprVague(grabCanvas, grabCtx);
-  }, 100)).observe(document.getElementById('container')!);
+  const isOpenPortraitUnobstructed = ref(true);
 
   // 每一帧渲染前，计算出蒙版并设置进去
   const beforeFrameRender: FrameRenderHook = ({ br }) => {
-    if (currentVideoItem.value?.isUnobstructed) {
+    if (currentVideoItem.value?.isUnobstructed && isOpenPortraitUnobstructed.value) {
       if (!video.value) return;
       const { videoRenderWidth, videoRenderHeight, isWidthSame } = videoRenderSize(
         video.value.clientWidth,
@@ -62,6 +65,7 @@ export default function usePortraitUnobstructed(
     // 不过出于性能的考虑，这里加上了节流函数，防止执行的太过频繁，否则弹幕的绘制帧率会过低，
     // 如果你的电脑性能好的话，可以将 time 缩小或者直接去掉节流函数，这样可以获得更加实时的蒙版数据。
     beforeFrameRender: _.throttle(beforeFrameRender, 200),
+    isOpenPortraitUnobstructed,
   }
 }
 

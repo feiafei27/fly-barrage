@@ -100,6 +100,12 @@
                 class="barrage-switch"
                 @change="avoidOverlapChange"
               />
+              <div class="setting-type" style="margin-top: 10px;">人像防挡</div>
+              <el-switch
+                v-model="isOpenPortraitUnobstructed"
+                class="barrage-switch"
+                @change="renderFrame"
+              />
             </div>
             <template #reference>
               <el-icon :size="25" style="cursor: pointer;">
@@ -431,9 +437,6 @@ onMounted(() => {
     },
   });
 
-  // 蒙版相关
-  const { beforeFrameRender } = usePortraitUnobstructed(video, currentVideoItem, barrageRenderer as Ref<BarrageRenderer>);
-
   // 设置 beforeFrameRender hook 函数
   barrageRenderer.value.beforeFrameRender = beforeFrameRender;
 
@@ -514,6 +517,12 @@ const {
   barrageColors, currentBarrageColor, sendBarrage,
   seniorBarrageConfig, sendSeniorBarrage, sendBlessingBarrage,
 } = useSendBarrage(barrageRenderer, video);
+
+// 蒙版相关
+const {
+  beforeFrameRender,
+  isOpenPortraitUnobstructed,
+} = usePortraitUnobstructed(video, currentVideoItem, barrageRenderer as Ref<BarrageRenderer>);
 </script>
 
 <style scoped lang="less">
