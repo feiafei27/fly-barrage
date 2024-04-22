@@ -1,7 +1,6 @@
-import { BarrageOptions } from './barrage';
+import { BaseBarrage, BarrageOptions, RenderFn } from './barrage';
 import Utils from './utils';
 import BarrageLayoutCalculate from './core';
-import { BaseBarrage } from './barrage';
 import { ErrorCode, BarrageOptionError } from './errors';
 
 /**
@@ -185,7 +184,6 @@ export default class BarrageRenderer {
 		if (validateResult !== true) {
 			throw validateResult;
 		}
-		barrage.prior = true;
 		this.barrageLayoutCalculate.send(barrage);
 	}
 
@@ -605,6 +603,8 @@ export type BarrageRenderHook = (data: {
 export type RenderConfig = {
 	// 自定义弹幕过滤器，返回 false，弹幕就会被过滤掉
 	barrageFilter?: (barrage: BaseBarrage) => boolean;
+	// 重要弹幕 边框 的自定义渲染函数
+	priorBorderCustomRender?: RenderFn;
 
 	// Canvas 元素默认和 container 等高，为了避免弹幕渲染遮挡住播放器的控制栏，可以设置减少一定的高度
 	heightReduce: number;
@@ -616,7 +616,7 @@ export type RenderConfig = {
 	minSpace: number;
 	// 是否重叠，只适用于滚动弹幕
 	avoidOverlap: boolean;
-
+	
 	// 透明度，有效值 0 ~ 1
 	opacity: number;
 	// 弹幕字体

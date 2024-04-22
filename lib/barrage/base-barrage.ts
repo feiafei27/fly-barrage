@@ -224,6 +224,8 @@ export default abstract class BaseBarrage {
    * @param ctx 渲染上下文
    */
   render(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
+    ctx.beginPath();
+
     // 每个弹幕渲染前
     this.br.beforeBarrageRender && this.br.beforeBarrageRender({
       ctx,
@@ -242,6 +244,30 @@ export default abstract class BaseBarrage {
       return;
     }
 
+    // 辅助开发的弹幕边框，用于确定弹幕的渲染大小
+    if (this.br.devConfig.isRenderBarrageBorder) {
+      ctx.strokeStyle = '#FF0000';
+      ctx.strokeRect(this.left, this.top, this.width, this.height);
+    }
+
+    // 如果是重要弹幕的话，需要渲染一个边框，例如当前用户自己发送的弹幕，就应该渲染边框作为明显的标识
+    if (this.prior) {
+      if (this.br.renderConfig.priorBorderCustomRender) {
+        // 如果提供了边框的自定义渲染函数的话，则使用自定义渲染函数进行渲染
+        this.br.renderConfig.priorBorderCustomRender({
+          ctx,
+          barrage: this,
+          br: this.br,
+          imageElementFactory: Utils.Cache.imageElementFactory,
+        })
+      } else {
+        // 否则使用默认渲染
+        ctx.strokeStyle = '#89D5FF';
+        ctx.strokeRect(this.left, this.top, this.width, this.height);
+      }
+    }
+
+    // 绘制弹幕内容
     // 设置绘图上下文
     this.setCtxFont(ctx);
     ctx.fillStyle = this.color;
@@ -259,11 +285,6 @@ export default abstract class BaseBarrage {
         )
       }
     })
-
-    if (this.br.devConfig.isRenderBarrageBorder || this.prior) {
-      ctx.strokeStyle = '#89D5FF';
-      ctx.strokeRect(this.left, this.top, this.width, this.height);
-    }
 
     // 每个弹幕渲染后
     this.br.afterBarrageRender && this.br.afterBarrageRender({

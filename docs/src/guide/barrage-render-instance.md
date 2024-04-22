@@ -51,6 +51,8 @@ export type BarrageImage = {
 export type RenderConfig = {
   // 自定义弹幕过滤器，返回 false，弹幕就会被过滤掉
   barrageFilter?: (barrage: BaseBarrage) => boolean;
+  // 重要弹幕 边框 的自定义渲染函数
+  priorBorderCustomRender?: RenderFn;
 
   // Canvas 元素默认和 container 等高，为了避免弹幕渲染遮挡住播放器的控制栏，
   // 可以设置减少一定的高度
@@ -82,6 +84,25 @@ export type DevConfig = {
   isRenderBarrageBorder: boolean;
   // 是否打印关键数据
   isLogKeyData: boolean;
+}
+
+/**
+ * 自定义 render 函数
+ */
+export type RenderFn = (options: CustomRenderOptions) => void;
+
+/**
+ * 自定义 render 函数的参数
+ */
+export type CustomRenderOptions = {
+  // 渲染上下文
+  ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+  // 渲染的弹幕实例
+  barrage: BaseBarrage;
+  // 渲染器实例
+  br: BarrageRenderer;
+  // 缓存获取图片的工厂方法
+  imageElementFactory: (url: string) => HTMLImageElement,
 }
 ```
 

@@ -18,7 +18,8 @@ export type BaseBarrageOptions = {
   lineHeight: number;
   // 弹幕颜色
   color: string;
-  // 是不是重要的
+  // 用于标识是不是重要的弹幕，重要弹幕会渲染出边框，并且一定会被渲染出来
+  // （如果弹幕免遮挡配置并且没有位置放入的话，重要弹幕会随机一个轨道进行渲染）
   prior?: boolean;
   // 自定义 render 相关配置
   customRender?: CustomRender;
