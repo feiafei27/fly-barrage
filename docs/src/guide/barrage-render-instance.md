@@ -27,6 +27,18 @@ export type RendererOptions = {
   renderConfig?: Partial<RenderConfig>;
   // 开发相关配置
   devConfig?: Partial<DevConfig>,
+  // 一系列钩子函数
+  // 每一帧渲染前的钩子函数
+  beforeFrameRender?: FrameRenderHook;
+  // 每一帧渲染后的钩子函数
+  afterFrameRender?: FrameRenderHook;
+  // 每个弹幕渲染前的钩子函数
+  beforeBarrageRender?: BarrageRenderHook;
+  // 每个弹幕渲染后的钩子函数
+  afterBarrageRender?: BarrageRenderHook;
+
+  // 蒙版数据
+  mask?: string | ImageData;
 }
 
 // 弹幕的配置看下一小节
@@ -104,6 +116,23 @@ export type CustomRenderOptions = {
   // 缓存获取图片的工厂方法
   imageElementFactory: (url: string) => HTMLImageElement,
 }
+
+/**
+ * 帧渲染钩子函数的类型
+ */
+export type FrameRenderHook = (data: {
+  ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  br: BarrageRenderer,
+}) => void;
+
+/**
+ * 弹幕渲染钩子函数的类型
+ */
+export type BarrageRenderHook = (data: {
+  ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  br: BarrageRenderer,
+  barrage: BaseBarrage,
+}) => void;
 ```
 
 # 弹幕渲染器提供的方法
@@ -132,4 +161,7 @@ export type CustomRenderOptions = {
 作用：设置开发配置。
 
 ## renderFrame(): void;
-作用：触发一帧的渲染
+作用：触发一帧的渲染。
+
+## setMask(mask?: string | ImageData): void;
+作用：设置蒙版数据（图片的 url 或者 ImageData 数据）。
