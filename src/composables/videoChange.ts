@@ -20,7 +20,7 @@ export default function useVideoChange() {
     {id: 3, name: '书记舞（人像防挡）', isUnobstructed: true, url: originPath + '/videos/demo3.mp4'},
   ]);
   // 当前播放视频的 id
-  const currentVideo = ref(3);
+  const currentVideo = ref(1);
   // 当前播放视频的配置项
   const currentVideoItem = computed(() => videos.value.find(item => item.id === currentVideo.value));
   // 当前播放视频的 src
