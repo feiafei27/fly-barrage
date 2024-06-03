@@ -21,6 +21,8 @@ Fully functional and powerful web-based barrage library
 
 ![Rendering effects](./public/imgs/0001.png)
 
+![Rendering effects](./public/imgs/0002.png)
+
 ## 📝 Official Website
 
 <https://fly-barrage.netlify.app/>

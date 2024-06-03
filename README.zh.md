@@ -21,6 +21,8 @@
 
 ![渲染效果](./public/imgs/0001.png)
 
+![渲染效果](./public/imgs/0002.png)
+
 ## 📝 官方网站
 
 <https://fly-barrage.netlify.app/>
