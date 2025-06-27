@@ -623,6 +623,19 @@ export type RenderConfig = {
 	fontFamily: string;
 	// 字体粗细
 	fontWeight: string;
+
+	// 字体描边
+	strokeStyle?: string;
+	lineWidth?: number;
+	lineCap?: CanvasLineCap;
+	lineJoin?: CanvasLineJoin;
+	miterLimit?: number;
+
+	// 字体阴影
+	shadowColor?: string;
+	shadowBlur?: number;
+	shadowOffsetX?: number;
+	shadowOffsetY?: number;
 }
 
 /**
