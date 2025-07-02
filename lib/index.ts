@@ -624,17 +624,26 @@ export type RenderConfig = {
 	// 字体粗细
 	fontWeight: string;
 
-	// 字体描边
+	// 字体描边相关
+	// 描边颜色
 	strokeStyle?: string;
+	// 描边宽度
 	lineWidth?: number;
+	// 线条端点样式
 	lineCap?: CanvasLineCap;
+	// 线条连接样式
 	lineJoin?: CanvasLineJoin;
+	// 控制锐角处斜接角的最大长度
 	miterLimit?: number;
 
-	// 字体阴影
+	// 字体阴影相关
+	// 阴影颜色
 	shadowColor?: string;
+	// 阴影模糊半径
 	shadowBlur?: number;
+	// 阴影在 X 轴的偏移量
 	shadowOffsetX?: number;
+	// 阴影在 Y 轴的偏移量
 	shadowOffsetY?: number;
 }
 
