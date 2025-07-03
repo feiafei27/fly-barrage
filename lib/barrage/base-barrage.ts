@@ -268,12 +268,16 @@ export default abstract class BaseBarrage {
     }
 
     // 绘制弹幕内容
-    // 设置绘图上下文
+    // 设置文字相关的属性
     this.setCtxFont(ctx);
-    ctx.fillStyle = this.color;
+    // 设置描边相关属性
+    this.setCtxFontStroke(ctx);
+    // 设置阴影相关属性
+    this.setCtxFontShadow(ctx);
     // 遍历当前弹幕的 sections
     this.sections.forEach(section => {
       if (section.sectionType === 'text') {
+        ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
         ctx.fillText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
       } else if (section.sectionType === 'image') {
         ctx.drawImage(
@@ -295,11 +299,50 @@ export default abstract class BaseBarrage {
   }
 
   /**
-   * 设置上下文的 font 属性
+   * 设置文字相关的属性
    * @param ctx 渲染上下文
    */
   setCtxFont(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
     ctx.font = `${this.br.renderConfig.fontWeight} ${this.fontSize}px ${this.br.renderConfig.fontFamily}`;
+    ctx.fillStyle = this.color;
+  }
+
+  /**
+   * 设置上下文字体描边相关的属性
+   * @param ctx 渲染上下文
+   */
+  setCtxFontStroke(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
+    const {
+      strokeStyle,
+      lineWidth,
+      lineCap,
+      lineJoin,
+      miterLimit,
+    } = this.br.renderConfig;
+
+    ctx.strokeStyle = strokeStyle || 'rgba(0, 0, 0, 0)';
+    ctx.lineWidth = lineWidth || 1;
+    ctx.lineCap = lineCap || 'butt';
+    ctx.lineJoin = lineJoin || 'miter';
+    ctx.miterLimit = miterLimit || 10;
+  }
+
+  /**
+   * 设置上下文字体阴影相关的属性
+   * @param ctx 渲染上下文
+   */
+  setCtxFontShadow(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
+    const {
+      shadowColor,
+      shadowBlur,
+      shadowOffsetX,
+      shadowOffsetY,
+    } = this.br.renderConfig;
+
+    ctx.shadowColor = shadowColor || 'rgba(0, 0, 0, 0)';
+    ctx.shadowBlur = shadowBlur || 0;
+    ctx.shadowOffsetX = shadowOffsetX || 0;
+    ctx.shadowOffsetY = shadowOffsetY || 0;
   }
 }
 
