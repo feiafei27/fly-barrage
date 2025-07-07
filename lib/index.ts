@@ -27,6 +27,17 @@ export default class BarrageRenderer {
 		fontWeight: 'normal',
 		avoidOverlap: true,
 		minSpace: 10,
+
+		strokeStyle: 'rgba(0, 0, 0, 0)',
+		lineWidth: 1,
+		lineCap: 'butt',
+		lineJoin: 'miter',
+		miterLimit: 10,
+
+		shadowColor: 'rgba(0, 0, 0, 0)',
+		shadowBlur: 0,
+		shadowOffsetX: 0,
+		shadowOffsetY: 0,
 	}
 	// 渲染配置
 	renderConfig: RenderConfig = this.defaultRenderConfig;
@@ -626,25 +637,25 @@ export type RenderConfig = {
 
 	// 字体描边相关
 	// 描边颜色
-	strokeStyle?: string;
+	strokeStyle: string;
 	// 描边宽度
-	lineWidth?: number;
+	lineWidth: number;
 	// 线条端点样式
-	lineCap?: CanvasLineCap;
+	lineCap: CanvasLineCap;
 	// 线条连接样式
-	lineJoin?: CanvasLineJoin;
+	lineJoin: CanvasLineJoin;
 	// 控制锐角处斜接角的最大长度
-	miterLimit?: number;
+	miterLimit: number;
 
 	// 字体阴影相关
 	// 阴影颜色
-	shadowColor?: string;
+	shadowColor: string;
 	// 阴影模糊半径
-	shadowBlur?: number;
+	shadowBlur: number;
 	// 阴影在 X 轴的偏移量
-	shadowOffsetX?: number;
+	shadowOffsetX: number;
 	// 阴影在 Y 轴的偏移量
-	shadowOffsetY?: number;
+	shadowOffsetY: number;
 }
 
 /**

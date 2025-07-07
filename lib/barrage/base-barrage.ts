@@ -320,11 +320,11 @@ export default abstract class BaseBarrage {
       miterLimit,
     } = this.br.renderConfig;
 
-    ctx.strokeStyle = strokeStyle || 'rgba(0, 0, 0, 0)';
-    ctx.lineWidth = lineWidth || 1;
-    ctx.lineCap = lineCap || 'butt';
-    ctx.lineJoin = lineJoin || 'miter';
-    ctx.miterLimit = miterLimit || 10;
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
+    ctx.lineJoin = lineJoin;
+    ctx.miterLimit = miterLimit;
   }
 
   /**
@@ -339,10 +339,10 @@ export default abstract class BaseBarrage {
       shadowOffsetY,
     } = this.br.renderConfig;
 
-    ctx.shadowColor = shadowColor || 'rgba(0, 0, 0, 0)';
-    ctx.shadowBlur = shadowBlur || 0;
-    ctx.shadowOffsetX = shadowOffsetX || 0;
-    ctx.shadowOffsetY = shadowOffsetY || 0;
+    ctx.shadowColor = shadowColor;
+    ctx.shadowBlur = shadowBlur;
+    ctx.shadowOffsetX = shadowOffsetX;
+    ctx.shadowOffsetY = shadowOffsetY;
   }
 }
 
