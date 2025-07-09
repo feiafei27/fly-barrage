@@ -2,7 +2,7 @@ import { Ref, ref } from 'vue';
 import BarrageRenderer, {
   BarrageImage, FixedBarrageOptions, ScrollBarrageOptions,
   SeniorBarrageOptions, SeniorBarrageConfig,
-} from '../../lib';
+} from '../../lib/index.ts';
 import { blessingRenderFn } from '../customRenders/blessing-render';
 import { ElMessage } from 'element-plus';
 import { v4 as uuid4 } from 'uuid';

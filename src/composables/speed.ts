@@ -1,5 +1,5 @@
 import { Ref, ref } from 'vue';
-import BarrageRenderer from '../../lib';
+import BarrageRenderer from '../../lib/index.ts';
 
 export default function useSpeed(barrageRenderer: Ref<BarrageRenderer | undefined>) {
   const speeds = ref([

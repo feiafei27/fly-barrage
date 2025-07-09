@@ -1,5 +1,5 @@
 import { ref, computed, nextTick } from 'vue';
-import { BaseBarrage } from '../../lib'
+import { BaseBarrage } from '../../lib/index.ts';
 import { ElInput } from 'element-plus';
 
 export default function useDisable() {

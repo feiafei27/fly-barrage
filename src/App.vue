@@ -100,6 +100,19 @@
                 class="barrage-switch"
                 @change="avoidOverlapChange"
               />
+              <div class="setting-type" style="margin-top: 10px;">描边类型</div>
+              <el-radio-group
+                v-model="currentStrokeShadowId"
+                size="small"
+                style="margin-top: 10px;"
+              >
+                <el-radio-button
+                  v-for="item in fontStrokeAndShadowConfigs"
+                  :label="item.id"
+                >
+                  {{ item.name }}
+                </el-radio-button>
+              </el-radio-group>
               <template v-if="currentVideoItem?.isUnobstructed">
                 <div class="setting-type" style="margin-top: 10px;">人像防挡</div>
                 <el-switch
@@ -387,7 +400,7 @@
 </template>
 
 <script setup lang="ts">
-import BarrageRenderer, { BaseBarrage } from '../lib';
+import BarrageRenderer, { BaseBarrage } from '../lib/index.ts';
 import { onMounted, ref, computed, watch, Ref } from 'vue';
 
 import { barrageImages, ImageGroups, imageGroups, generateBarrageData } from './data';
@@ -395,7 +408,7 @@ import {
   useBarrageOpen, useDisable, useResize,
   useOpacity, useRenderRegion, useSpeed,
   useAvoidOverlap, useVideoChange, useSendBarrage,
-  usePortraitUnobstructed,
+  usePortraitUnobstructed, useFontStrokeAndShadow,
 } from './composables';
 
 const barrageRenderer = ref<BarrageRenderer>();
@@ -421,6 +434,7 @@ onMounted(() => {
       fontWeight: 'bold',
       opacity: opacity.value / 100,
       avoidOverlap: avoidOverlap.value,
+      ...currentStrokeShadowConfig.value,
       barrageFilter: (barrage: BaseBarrage) => {
         // 弹幕类型的过滤
         if (disableJudges.value.some(disableJudge => disableJudge(barrage))) return false;
@@ -548,6 +562,13 @@ const {
   beforeFrameRender,
   isOpenPortraitUnobstructed,
 } = usePortraitUnobstructed(video, currentVideoItem, barrageRenderer as Ref<BarrageRenderer>);
+
+// 字体描边、阴影相关
+const {
+  fontStrokeAndShadowConfigs,
+  currentStrokeShadowId,
+  currentStrokeShadowConfig,
+} = useFontStrokeAndShadow(barrageRenderer);
 </script>
 
 <style scoped lang="less">

@@ -1,5 +1,5 @@
 import { Ref, ref, onMounted } from 'vue';
-import BarrageRenderer, { FrameRenderHook } from '../../lib';
+import BarrageRenderer, { FrameRenderHook } from '../../lib/index.ts';
 import { VideoItem } from './videoChange';
 import _ from 'lodash';
 

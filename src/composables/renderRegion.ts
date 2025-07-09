@@ -1,5 +1,5 @@
 import { Ref, ref } from 'vue';
-import BarrageRenderer from '../../lib';
+import BarrageRenderer from '../../lib/index.ts';
 
 export default function useRenderRegion(barrageRenderer: Ref<BarrageRenderer | undefined>) {
   const renderRegions = ref([

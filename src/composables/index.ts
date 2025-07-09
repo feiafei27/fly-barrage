@@ -8,6 +8,7 @@ import useAvoidOverlap from './avoidOverlap';
 import useVideoChange from './videoChange';
 import useSendBarrage from './sendBarrage';
 import usePortraitUnobstructed from './portraitUnobstructed';
+import useFontStrokeAndShadow from './fontStrokeAndShadow';
 
 export {
   useBarrageOpen,
@@ -20,4 +21,5 @@ export {
   useVideoChange,
   useSendBarrage,
   usePortraitUnobstructed,
+  useFontStrokeAndShadow,
 }
