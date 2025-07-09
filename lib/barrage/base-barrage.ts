@@ -270,10 +270,6 @@ export default abstract class BaseBarrage {
     // 绘制弹幕内容
     // 设置文字相关的属性
     this.setCtxFont(ctx);
-    // 设置描边相关属性
-    this.setCtxFontStroke(ctx);
-    // 设置阴影相关属性
-    this.setCtxFontShadow(ctx);
     // 遍历当前弹幕的 sections
     this.sections.forEach(section => {
       if (section.sectionType === 'text') {
@@ -305,44 +301,6 @@ export default abstract class BaseBarrage {
   setCtxFont(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
     ctx.font = `${this.br.renderConfig.fontWeight} ${this.fontSize}px ${this.br.renderConfig.fontFamily}`;
     ctx.fillStyle = this.color;
-  }
-
-  /**
-   * 设置上下文字体描边相关的属性
-   * @param ctx 渲染上下文
-   */
-  setCtxFontStroke(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
-    const {
-      strokeStyle,
-      lineWidth,
-      lineCap,
-      lineJoin,
-      miterLimit,
-    } = this.br.renderConfig;
-
-    ctx.strokeStyle = strokeStyle;
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = lineCap;
-    ctx.lineJoin = lineJoin;
-    ctx.miterLimit = miterLimit;
-  }
-
-  /**
-   * 设置上下文字体阴影相关的属性
-   * @param ctx 渲染上下文
-   */
-  setCtxFontShadow(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) {
-    const {
-      shadowColor,
-      shadowBlur,
-      shadowOffsetX,
-      shadowOffsetY,
-    } = this.br.renderConfig;
-
-    ctx.shadowColor = shadowColor;
-    ctx.shadowBlur = shadowBlur;
-    ctx.shadowOffsetX = shadowOffsetX;
-    ctx.shadowOffsetY = shadowOffsetY;
   }
 }
 

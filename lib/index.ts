@@ -28,16 +28,8 @@ export default class BarrageRenderer {
 		avoidOverlap: true,
 		minSpace: 10,
 
-		strokeStyle: 'rgba(0, 0, 0, 0)',
-		lineWidth: 1,
-		lineCap: 'butt',
-		lineJoin: 'miter',
-		miterLimit: 10,
-
-		shadowColor: 'rgba(0, 0, 0, 0)',
-		shadowBlur: 0,
-		shadowOffsetX: 0,
-		shadowOffsetY: 0,
+		...DEFAULT_FONT_STROKE,
+		...DEFAULT_FONT_SHADOW,
 	}
 	// 渲染配置
 	renderConfig: RenderConfig = this.defaultRenderConfig;
@@ -103,19 +95,11 @@ export default class BarrageRenderer {
 	}: RendererOptions) {
 		this.video = video;
 
-		// 先设置好渲染配置
-		this.setRenderConfigInternal(renderConfig || {}, true);
-		// 先设置好开发配置
-		this.setDevConfig(devConfig || {});
-
-		// 设置渲染图片
-		this.barrageImages = barrageImages;
-
 		// 创建、处理相关 DOM
 		this.container =
 			typeof container === 'string'
-			? document.getElementById(container)
-			: container;
+				? document.getElementById(container)
+				: container;
 		this.canvas = document.createElement('canvas');
 		this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -124,8 +108,19 @@ export default class BarrageRenderer {
 
 		this.handleDOM(this.container, this.canvas, this.ctx);
 
+		// 设置好渲染配置
+		this.setRenderConfigInternal(renderConfig || {}, true);
+		// 设置好开发配置
+		this.setDevConfig(devConfig || {});
+
+		// 设置渲染图片
+		this.barrageImages = barrageImages;
+
 		// 设置弹幕数据
 		this.setBarrages(barrages);
+
+		// 设置字体描边以及阴影
+		this._setCtxFontStrokeShadow();
 
 		// 设置钩子函数
 		this.beforeFrameRender = beforeFrameRender;
@@ -267,6 +262,8 @@ export default class BarrageRenderer {
 
 		Object.assign(this.renderConfig, renderConfig);
 
+		this._setCtxFontStrokeShadow();
+
 		// 如果 init 为 false 的话，说明此时是外部触发的 setRenderConfig，需要根据设置的 render 属性进行额外的处理
 		// 对布局有影响的属性：speed、heightReduce、renderRegion、avoidOverlap
 		if (!init && (isSpeedChange || isHeightReduceChange || isRenderRegionChange || isAvoidOverlapChange)) {
@@ -386,6 +383,36 @@ export default class BarrageRenderer {
 		if (!this.animationHandle && this.isOpen) {
 			this.animationHandle = requestAnimationFrame(() => this._render());
 		}
+	}
+
+	/**
+	 * 设置字体描边以及阴影
+	 * @private
+	 */
+	private _setCtxFontStrokeShadow() {
+		const {
+			strokeStyle,
+			lineWidth,
+			lineCap,
+			lineJoin,
+			miterLimit,
+
+			shadowColor,
+			shadowBlur,
+			shadowOffsetX,
+			shadowOffsetY,
+		} = this.renderConfig;
+
+		this.offscreenCanvasCtx.strokeStyle = strokeStyle;
+		this.offscreenCanvasCtx.lineWidth = lineWidth;
+		this.offscreenCanvasCtx.lineCap = lineCap;
+		this.offscreenCanvasCtx.lineJoin = lineJoin;
+		this.offscreenCanvasCtx.miterLimit = miterLimit;
+
+		this.offscreenCanvasCtx.shadowColor = shadowColor;
+		this.offscreenCanvasCtx.shadowBlur = shadowBlur;
+		this.offscreenCanvasCtx.shadowOffsetX = shadowOffsetX;
+		this.offscreenCanvasCtx.shadowOffsetY = shadowOffsetY;
 	}
 
 	/**
@@ -608,6 +635,49 @@ export type BarrageRenderHook = (data: {
 	barrage: BaseBarrage,
 }) => void;
 
+// 字体描边相关
+export type FontStroke = {
+	// 描边颜色
+	strokeStyle: string;
+	// 描边宽度
+	lineWidth: number;
+	// 线条端点样式
+	lineCap: CanvasLineCap;
+	// 线条连接样式
+	lineJoin: CanvasLineJoin;
+	// 控制锐角处斜接角的最大长度
+	miterLimit: number;
+}
+
+export const DEFAULT_FONT_STROKE: FontStroke = {
+	strokeStyle: 'rgba(0, 0, 0, 0)',
+	lineWidth: 1,
+	lineCap: 'butt',
+	lineJoin: 'miter',
+	miterLimit: 10,
+}
+
+// 字体阴影相关
+export type FontShadow = {
+	// 阴影颜色
+	shadowColor: string;
+	// 阴影模糊半径
+	shadowBlur: number;
+	// 阴影在 X 轴的偏移量
+	shadowOffsetX: number;
+	// 阴影在 Y 轴的偏移量
+	shadowOffsetY: number;
+}
+
+export const DEFAULT_FONT_SHADOW: FontShadow = {
+	shadowColor: 'rgba(0, 0, 0, 0)',
+	shadowBlur: 0,
+	shadowOffsetX: 0,
+	shadowOffsetY: 0,
+}
+
+export type FontStrokeAndShadow = FontStroke & FontShadow;
+
 /**
  * 弹幕渲染器渲染弹幕的配置
  */
@@ -634,29 +704,7 @@ export type RenderConfig = {
 	fontFamily: string;
 	// 字体粗细
 	fontWeight: string;
-
-	// 字体描边相关
-	// 描边颜色
-	strokeStyle: string;
-	// 描边宽度
-	lineWidth: number;
-	// 线条端点样式
-	lineCap: CanvasLineCap;
-	// 线条连接样式
-	lineJoin: CanvasLineJoin;
-	// 控制锐角处斜接角的最大长度
-	miterLimit: number;
-
-	// 字体阴影相关
-	// 阴影颜色
-	shadowColor: string;
-	// 阴影模糊半径
-	shadowBlur: number;
-	// 阴影在 X 轴的偏移量
-	shadowOffsetX: number;
-	// 阴影在 Y 轴的偏移量
-	shadowOffsetY: number;
-}
+} & FontStrokeAndShadow;
 
 /**
  * 弹幕中渲染图片的配置
