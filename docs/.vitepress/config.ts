@@ -14,6 +14,7 @@ export default defineConfig({
             { text: '快速开始', link: '/guide/quick-start' },
             { text: '弹幕渲染器', link: '/guide/barrage-render-instance' },
             { text: '弹幕', link: '/guide/barrage' },
+            { text: '字体描边及阴影', link: '/guide/barrage-stroke-shadow' },
             { text: '弹幕渲染图片', link: '/guide/barrage-image' },
             { text: '钩子函数', link: '/guide/render-hook.md' },
             { text: '蒙版（实现人像免遮挡）', link: '/guide/mask.md' },
