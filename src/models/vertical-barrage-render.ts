@@ -61,6 +61,7 @@ export default class VerticalBarrageRender {
     this.ctx.fillStyle = this.barrage.color;
 
     this.barrageChars.forEach(barrageChar => {
+      this.ctx.strokeText(barrageChar.char, left + barrageChar.leftOffset, top + barrageChar.topOffset);
       this.ctx.fillText(barrageChar.char, left + barrageChar.leftOffset, top + barrageChar.topOffset);
 
       // this.ctx.strokeStyle = '#89D5FF';
