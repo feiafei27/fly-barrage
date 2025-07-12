@@ -649,6 +649,7 @@ export type FontStroke = {
 	miterLimit: number;
 }
 
+// 字体描边的默认值
 export const DEFAULT_FONT_STROKE: FontStroke = {
 	strokeStyle: 'rgba(0, 0, 0, 0)',
 	lineWidth: 1,
@@ -669,6 +670,7 @@ export type FontShadow = {
 	shadowOffsetY: number;
 }
 
+// 字体阴影的默认值
 export const DEFAULT_FONT_SHADOW: FontShadow = {
 	shadowColor: 'rgba(0, 0, 0, 0)',
 	shadowBlur: 0,
