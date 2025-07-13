@@ -24,6 +24,7 @@
     "ins": "npm install --registry https://registry.npmmirror.com/",
     "dev": "vite --host --port 5174",
     "build": "vite build",
+    "build:demo": "vite build --config vite-demo.config.ts",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
