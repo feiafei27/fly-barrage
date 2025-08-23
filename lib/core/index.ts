@@ -1,5 +1,5 @@
 import BarrageRenderer from '../index.ts';
-import { BaseBarrage, BarrageOptions, FixedBarrage, ScrollBarrage, SeniorBarrage } from '../barrage/index';
+import {BarrageOptions, BaseBarrage, FixedBarrage, ScrollBarrage, SeniorBarrage} from '../barrage/index';
 import FixedBarrageLayout from './fixed-barrage-layout.ts';
 import VirtualTrackAlgorithm from './virtual-track-algorithm';
 import Utils from '../utils';
@@ -19,6 +19,8 @@ export default class BarrageLayoutCalculate {
   allBarrageInstances: BaseBarrage[] = [];
   fixedBarrageInstances: FixedBarrage[] = [];
   scrollBarrageInstances: ScrollBarrage[] = [];
+  // 实际能够渲染出来的滚动弹幕
+  canShowScrollBarrageInstances: ScrollBarrage[] = [];
   seniorBarrageInstances: SeniorBarrage[] = [];
 
   // 固定弹幕布局计算器
@@ -32,7 +34,7 @@ export default class BarrageLayoutCalculate {
     this.br = barrageRenderer;
 
     this.fixedBarrageLayout = new FixedBarrageLayout(this.br);
-    this.virtualTrackAlgorithm = new VirtualTrackAlgorithm(this.br);
+    this.virtualTrackAlgorithm = new VirtualTrackAlgorithm(this.br, this);
   }
 
   /**
@@ -117,22 +119,25 @@ export default class BarrageLayoutCalculate {
 
   /**
    * 获取当前应该渲染的滚动弹幕
-   * @param time 视频播放时间点
+   * @param time 视频播放时间点，毫秒为单位
    */
   getRenderScrollBarrages(time: number): ScrollBarrage[] {
-    // 弹幕整体向左移动的总距离，时间 * 速度
-    const translateX = (time / 1000) * this.br.renderConfig.speed;
-
-    const renderScrollBarrages = this.scrollBarrageInstances.filter(barrage => barrage.show && barrage.top !== undefined).filter(barrage =>
-      barrage.originalRight - translateX >= 0 &&
-      barrage.originalLeft - translateX < this.br.canvasSize.width
-    );
-
-    renderScrollBarrages.forEach(barrage => {
-      barrage.left = barrage.originalLeft - translateX;
-    })
-
-    return renderScrollBarrages;
+    // 当前时刻渲染出来的弹幕
+    return this.canShowScrollBarrageInstances.filter(barrage => {
+      // 这个弹幕在当前时刻是否能渲染
+      const currentIsShow =
+        time >= barrage.time &&
+        time <= barrage.endTime;
+      // 如果能渲染的话，计算具体渲染时 left
+      if (currentIsShow) {
+        barrage.left =
+          barrage.originalLeft -
+          // 弹幕整体向左移动的总距离，时间 * 速度
+          ((time / 1000) * this.br.renderConfig.speed);
+      }
+      // 返回是否能渲染的标识
+      return currentIsShow;
+    });
   }
 
   /**

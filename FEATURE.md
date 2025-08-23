@@ -16,3 +16,6 @@
 
 ### feature-6 branch
 - 支持定义显示多少行弹幕；
+
+### optimize
+- 性能优化

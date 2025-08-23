@@ -19,6 +19,8 @@ export default class ScrollBarrage extends BaseBarrage {
   show = true;
   // 当前弹幕会占据几个实际轨道
   grade!: number;
+  // 弹幕结束渲染的时间点（毫秒为单位）
+  endTime!: number;
 
   constructor(scrollBarrageOptions: ScrollBarrageOptions, barrageRenderer: BarrageRenderer) {
     super(scrollBarrageOptions, barrageRenderer);
@@ -34,5 +36,12 @@ export default class ScrollBarrage extends BaseBarrage {
     // 计算公式是：Canvas 元素的宽 + 弹幕出现时间 * 弹幕速度
     this.originalLeft = this.br.canvasSize.width + (this.time / 1000) * this.br.renderConfig.speed;
     this.originalRight = this.originalLeft + this.width;
+
+    // 弹幕渲染结束时间
+    this.endTime =
+      // 弹幕渲染开始时间
+      this.time +
+      // 弹幕渲染移动距离 / 速度 === 弹幕移动渲染所需要的时间
+      (this.br.canvasSize.width + this.width) / this.br.speedPerMs;
   }
 }

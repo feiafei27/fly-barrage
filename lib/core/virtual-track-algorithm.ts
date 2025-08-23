@@ -1,5 +1,6 @@
 import BarrageRenderer from '../index.ts';
 import { ScrollBarrage } from '../barrage';
+import BarrageLayoutCalculate from './index.ts';
 import Utils from '../utils';
 
 /**
@@ -8,6 +9,8 @@ import Utils from '../utils';
 export default class VirtualTrackAlgorithm {
   // 全局弹幕渲染器
   br: BarrageRenderer;
+  // 弹幕布局计算器
+  bLCalculate: BarrageLayoutCalculate;
 
   // 实际轨道数组
   realTracks: RealTrack[] = [];
@@ -27,8 +30,12 @@ export default class VirtualTrackAlgorithm {
   vtToVtsMap = new Map<VirtualTrack, VirtualTrack[]>();
   gradeToVtsMap = new Map<number, VirtualTrack[]>();
 
-  constructor(barrageRenderer: BarrageRenderer) {
+  constructor(
+    barrageRenderer: BarrageRenderer,
+    barrageLayoutCalculate: BarrageLayoutCalculate
+  ) {
     this.br = barrageRenderer;
+    this.bLCalculate = barrageLayoutCalculate;
   }
 
   /**
@@ -108,6 +115,11 @@ export default class VirtualTrackAlgorithm {
     } else {
       this.allowOverlapLayout(scrollBarrages);
     }
+
+    // 计算处理完成后，将能够渲染出来的弹幕放到一个单独的数组中
+    this.bLCalculate.canShowScrollBarrageInstances =
+      this.bLCalculate.scrollBarrageInstances
+        .filter(barrage => barrage.show && barrage.top !== undefined);
   }
 
   /**

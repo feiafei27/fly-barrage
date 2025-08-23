@@ -313,6 +313,7 @@ export default class BarrageRenderer {
 			renderBarrages = renderBarrages.filter(barrage => this.renderConfig.barrageFilter!(barrage));
 		}
 
+		// 将内容先绘制到离屏 canvas 中
 		this.offscreenCanvasCtx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
 
 		// 每一帧渲染前
@@ -337,7 +338,7 @@ export default class BarrageRenderer {
 			br: this,
 		});
 
-		// 将离屏中的绘图绘制到 ctx 中
+		// 将离屏中的内容绘制到 ctx 中
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.save();
 		// 进行蒙版的绘制
@@ -442,6 +443,13 @@ export default class BarrageRenderer {
 			width: this.canvas.width / this.dpr,
 			height: this.canvas.height / this.dpr,
 		};
+	}
+
+	/**
+	 * 弹幕运行速度，仅对滚动弹幕有效（每毫秒多少像素）
+	 */
+	get speedPerMs () {
+		return this.renderConfig.speed / 1000;
 	}
 
 	/**
