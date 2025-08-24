@@ -34,14 +34,14 @@ export default function useFontStrokeAndShadow(barrageRenderer: Ref<BarrageRende
       name: '红色投影',
       config: {
         shadowColor: 'red',
-        shadowBlur: 2,
-        shadowOffsetX: 2,
-        shadowOffsetY: 2,
+        shadowBlur: 1,
+        shadowOffsetX: 1,
+        shadowOffsetY: 1,
       }
     }
   ])
   // 当前选择的配置 id
-  const currentStrokeShadowId = ref<number>(3);
+  const currentStrokeShadowId = ref<number>(2);
   // 当前选择的配置
   const currentStrokeShadowConfig = computed<Partial<FontStrokeAndShadow>>(() => {
     const config = fontStrokeAndShadowConfigs.value.find(item => item.id === currentStrokeShadowId.value)?.config || {};

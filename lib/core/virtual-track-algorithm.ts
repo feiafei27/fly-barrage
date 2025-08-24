@@ -253,6 +253,7 @@ export default class VirtualTrackAlgorithm {
     } else {
       this.randomTrackBarrage(scrollBarrage);
     }
+    this.bLCalculate.canShowScrollBarrageInstances.push(scrollBarrage);
   }
 
   /**

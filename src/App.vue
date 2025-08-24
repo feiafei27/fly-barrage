@@ -538,8 +538,8 @@ const generateBarrageDataSet = () => {
     isSenior: true,
     isSpecial: true,
 
-    fixedNum: 100,
-    scrollNum: 300,
+    fixedNum: 200,
+    scrollNum: 500,
     seniorNum: 0,
     specialNum: 200,
   });

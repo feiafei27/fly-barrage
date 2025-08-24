@@ -34,8 +34,13 @@ export default class PreRenderOptimizer {
 
     barrage.sections.forEach(section => {
       if (section.sectionType === 'text') {
-        // todo：如果没有描边的话，这一句可以不执行
-        // this.preRenderCanvasCtx.strokeText(section.text, section.leftOffset, section.topOffset);
+        // 描边可见的时候，才执行这一句
+        if (
+          Utils.Color.isVisibleColor(this.br.renderConfig.strokeStyle) &&
+          this.br.renderConfig.lineWidth > 0
+        ) {
+          this.preRenderCanvasCtx.strokeText(section.text, section.leftOffset, section.topOffset);
+        }
         this.preRenderCanvasCtx.fillText(section.text, section.leftOffset, section.topOffset);
       } else if (section.sectionType === 'image') {
         this.preRenderCanvasCtx.drawImage(
@@ -66,7 +71,7 @@ export default class PreRenderOptimizer {
   /**
    * 为了避免 ImageBitmap 占用太多的内存，需要在切换渲染弹幕集的时候，进行 ImageBitmap 的清空
    */
-  clearCache() {
+  clear() {
     this.imageBitmapCache.clear();
   }
 

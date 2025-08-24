@@ -288,8 +288,13 @@ export default abstract class BaseBarrage {
 
       // 没有缓存的 ImageBitmap 的话，常规进行渲染
       if (section.sectionType === 'text') {
-        // todo：如果没有描边的话，这一句可以不执行
-        // ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
+        // 描边可见的时候，才执行这一句
+        if (
+          Utils.Color.isVisibleColor(this.br.renderConfig.strokeStyle) &&
+          this.br.renderConfig.lineWidth > 0
+        ) {
+          ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
+        }
         ctx.fillText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
       } else if (section.sectionType === 'image') {
         ctx.drawImage(

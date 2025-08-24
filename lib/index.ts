@@ -249,6 +249,9 @@ export default class BarrageRenderer {
 		// 如果没有弹幕数据的话，直接 return
 		if (!barrages) return;
 
+		// 因为来了新一批的弹幕，之前的预处理缓存可以清空了
+		this.preRenderOptimizer.clear();
+
 		// 对不合规范的弹幕数据进行过滤
 		barrages = barrages.filter(barrage => {
 			return this.validateBarrageOption(barrage) === true;
@@ -270,6 +273,9 @@ export default class BarrageRenderer {
 	 * @param init 是不是初始化
 	 */
 	private setRenderConfigInternal(renderConfig: Partial<RenderConfig>, init = false) {
+		// 清空预渲染缓存
+		this.preRenderOptimizer.clear();
+
 		const renderConfigKeys = Object.keys(renderConfig);
 		const isSpeedChange = renderConfigKeys.includes('speed') && renderConfig.speed !== this.renderConfig.speed;
 		const isHeightReduceChange = renderConfigKeys.includes('heightReduce') && renderConfig.heightReduce !== this.renderConfig.heightReduce;
@@ -420,7 +426,7 @@ export default class BarrageRenderer {
 			shadowOffsetX,
 			shadowOffsetY,
 		} = this.renderConfig;
-
+		// 离屏 Canvas Ctx 设置
 		this.offscreenCanvasCtx.strokeStyle = strokeStyle;
 		this.offscreenCanvasCtx.lineWidth = lineWidth;
 		this.offscreenCanvasCtx.lineCap = lineCap;
@@ -431,6 +437,18 @@ export default class BarrageRenderer {
 		this.offscreenCanvasCtx.shadowBlur = shadowBlur;
 		this.offscreenCanvasCtx.shadowOffsetX = shadowOffsetX;
 		this.offscreenCanvasCtx.shadowOffsetY = shadowOffsetY;
+
+		// 预渲染 Canvas Ctx 设置
+		this.preRenderCanvasCtx.strokeStyle = strokeStyle;
+		this.preRenderCanvasCtx.lineWidth = lineWidth;
+		this.preRenderCanvasCtx.lineCap = lineCap;
+		this.preRenderCanvasCtx.lineJoin = lineJoin;
+		this.preRenderCanvasCtx.miterLimit = miterLimit;
+
+		this.preRenderCanvasCtx.shadowColor = shadowColor;
+		this.preRenderCanvasCtx.shadowBlur = shadowBlur;
+		this.preRenderCanvasCtx.shadowOffsetX = shadowOffsetX;
+		this.preRenderCanvasCtx.shadowOffsetY = shadowOffsetY;
 	}
 
 	/**
