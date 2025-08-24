@@ -1,6 +1,5 @@
 import { BarrageImage, BarrageOptions } from '../../lib';
 import { blessingRenderFn } from '../customRenders/blessing-render';
-
 import { v4 as uuid4 } from 'uuid';
 import { getRandomInt } from '../utils';
 
@@ -154,14 +153,40 @@ export const imageGroups: ImageGroups[] = [
 /**
  * 获取弹幕相关数据
  */
-export function generateBarrageData(videoId: number, config: generateBarrageConfig) {
+export function generateBarrageData(
+  videoId: number,
+  config: generateBarrageConfig,
+) {
   const {
     isFixed, isScroll, isSenior, isSpecial,
     fixedNum, scrollNum, seniorNum, specialNum,
   } = config;
   console.log(videoId);
 
-  const textSections = [
+  const textSections = videoId === 4 ? [
+    '人生如棋，我韩立落子无悔！',
+    '参见太上长老！',
+    '太帅了，卧槽',
+    '韩小宝',
+    '相貌平平',
+    '排面',
+    '太有排面了。',
+    '这么多修士吗',
+    '当了200多年的双花红棍，终于坐上了话事人的位置',
+    '一共喊了九次然后应该是来祝贺的外宾也有喊',
+    '这时候应该切一个慕沛灵的镜头',
+    '第一遍是结丹喊的 第二遍是筑基 第三遍是炼气',
+    '这里增加韩立发言比较好，一句话都不说',
+    '韩立请发表获奖感言',
+    '人界第一躺赢宗门诞生',
+    '历经200多年，从孤零漂泊无依无靠，到受万千弟子膜拜，泪目了',
+    '终于不是自己一个人孤身奋战了',
+    '心魔经历多了，你还不熟悉心魔的套路吗？还能上当，那韩立这么多年的闯荡白费了',
+    '每个人心魔都是自己心底最怕的东西，韩立一路走来，算是问心无愧，自然没什么怕的',
+    '200多年孤零一人，到如今万千弟子膜拜，这一路真不容易',
+    '万人敬仰韩天尊!',
+    '这段这么有史诗感的么',
+  ] : [
     `读书不觉已春深`,
     `一寸光阴一寸金`,
     `不是道人来引笑`,
@@ -185,7 +210,9 @@ export function generateBarrageData(videoId: number, config: generateBarrageConf
     `恭喜发财`,
   ];
 
-  const blessingTextSections = [
+  const blessingTextSections = videoId === 4 ? [
+    '参见太上长老',
+  ] : [
     `新年快乐`,
     `灯笼起飞`,
     `不错`,

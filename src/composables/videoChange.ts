@@ -18,9 +18,10 @@ export default function useVideoChange() {
     {id: 1, name: '花好月圆会', isUnobstructed: false, url: originPath + '/videos/demo1.mp4'},
     {id: 2, name: '陶喆《天天》Soul Power2003', isUnobstructed: false, url: originPath + '/videos/demo2.mp4'},
     {id: 3, name: '书记舞（人像防挡）', isUnobstructed: true, url: originPath + '/videos/demo3.mp4'},
+    {id: 4, name: '落云宗新晋太上长老—韩立', isUnobstructed: false, url: originPath + '/videos/demo4.mp4'},
   ]);
   // 当前播放视频的 id
-  const currentVideo = ref(2);
+  const currentVideo = ref(4);
   // 当前播放视频的配置项
   const currentVideoItem = computed(() => videos.value.find(item => item.id === currentVideo.value));
   // 当前播放视频的 src
