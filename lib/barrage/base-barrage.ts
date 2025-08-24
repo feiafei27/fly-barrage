@@ -272,8 +272,24 @@ export default abstract class BaseBarrage {
     this.setCtxFont(ctx);
     // 遍历当前弹幕的 sections
     this.sections.forEach(section => {
+      const imageBitmap = this.br.preRenderOptimizer.getImageBitmap(this);
+
+      // 如果有缓存的 ImageBitmap 的话，直接使用 ImageBitmap 进行渲染即可
+      if (imageBitmap) {
+        ctx.drawImage(
+          imageBitmap,
+          this.left,
+          this.top,
+          this.width,
+          this.height,
+        );
+        return;
+      }
+
+      // 没有缓存的 ImageBitmap 的话，常规进行渲染
       if (section.sectionType === 'text') {
-        ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
+        // todo：如果没有描边的话，这一句可以不执行
+        // ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
         ctx.fillText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
       } else if (section.sectionType === 'image') {
         ctx.drawImage(

@@ -2,6 +2,7 @@ import { BaseBarrage, BarrageOptions, RenderFn } from './barrage';
 import Utils from './utils';
 import BarrageLayoutCalculate from './core';
 import { ErrorCode, BarrageOptionError } from './errors';
+import PreRenderOptimizer from './core/pre-render-optimizer.ts';
 
 /**
  * 弹幕渲染器
@@ -62,6 +63,13 @@ export default class BarrageRenderer {
 	offscreenCanvas: HTMLCanvasElement;
 	offscreenCanvasCtx: CanvasRenderingContext2D;
 
+	// 用于生成 ImageBitmap 预渲染数据的 canvas
+	preRenderCanvas: HTMLCanvasElement;
+	preRenderCanvasCtx: CanvasRenderingContext2D;
+	// 预渲染优化器
+	preRenderOptimizer: PreRenderOptimizer;
+
+	// 显示物理设备 dpr
 	dpr = Utils.Canvas.getDevicePixelRatio();
 
 	// 一系列钩子函数
@@ -105,6 +113,10 @@ export default class BarrageRenderer {
 
 		this.offscreenCanvas = document.createElement('canvas');
 		this.offscreenCanvasCtx = this.offscreenCanvas.getContext('2d') as CanvasRenderingContext2D;
+
+		this.preRenderCanvas = document.createElement('canvas');
+		this.preRenderCanvasCtx = this.preRenderCanvas.getContext('2d') as CanvasRenderingContext2D;
+		this.preRenderOptimizer = new PreRenderOptimizer(this);
 
 		this.handleDOM(this.container, this.canvas, this.ctx);
 
@@ -164,6 +176,11 @@ export default class BarrageRenderer {
 		this.offscreenCanvas.width = container.clientWidth;
 		this.offscreenCanvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
 		this.handleHighDprVague(this.offscreenCanvas, this.offscreenCanvasCtx);
+
+		// 需要同步处理离屏 canvas
+		this.preRenderCanvas.width = container.clientWidth;
+		this.preRenderCanvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
+		this.handleHighDprVague(this.preRenderCanvas, this.preRenderCanvasCtx);
 	}
 	
 	/**
