@@ -21,12 +21,12 @@ export default class PreRenderOptimizer {
    * @param barrage 需要渲染的弹幕
    */
   getImageBitmap(barrage: BaseBarrage): ImageBitmap | undefined {
-    // 如果缓存中有 ImageBitmap 的话，直接获取返回即可
+    // 如果缓存中有弹幕对应的 ImageBitmap 的话，直接获取返回即可
     if (this.imageBitmapCache.has(barrage.id)) {
       return this.imageBitmapCache.get(barrage.id);
     }
 
-    // 进行弹幕的绘制
+    // 没有对应缓存的话，进行弹幕的绘制，获取并存储 ImageBitmap 缓存
     const { width, height } = this.preRenderCanvas;
     this.preRenderCanvasCtx.clearRect(0, 0, width, height);
 

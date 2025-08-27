@@ -267,45 +267,44 @@ export default abstract class BaseBarrage {
       }
     }
 
-    // 绘制弹幕内容
-    // 设置文字相关的属性
-    this.setCtxFont(ctx);
-    // 遍历当前弹幕的 sections
-    this.sections.forEach(section => {
-      const imageBitmap = this.br.preRenderOptimizer.getImageBitmap(this);
-
-      // 如果有缓存的 ImageBitmap 的话，直接使用 ImageBitmap 进行渲染即可
-      if (imageBitmap) {
-        ctx.drawImage(
-          imageBitmap,
-          this.left,
-          this.top,
-          this.width,
-          this.height,
-        );
-        return;
-      }
-
-      // 没有缓存的 ImageBitmap 的话，常规进行渲染
-      if (section.sectionType === 'text') {
-        // 描边可见的时候，才执行这一句
-        if (
-          Utils.Color.isVisibleColor(this.br.renderConfig.strokeStyle) &&
-          this.br.renderConfig.lineWidth > 0
-        ) {
-          ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
+    // 尝试获取弹幕的缓存
+    const imageBitmap = this.br.preRenderOptimizer.getImageBitmap(this);
+    // 如果有缓存的 ImageBitmap 的话，直接使用 ImageBitmap 进行渲染即可
+    if (imageBitmap) {
+      ctx.drawImage(
+        imageBitmap,
+        this.left,
+        this.top,
+        this.width,
+        this.height,
+      );
+    } else {
+      // 没有缓存的话，进行常规的渲染
+      // 绘制弹幕内容
+      // 设置文字相关的属性
+      this.setCtxFont(ctx);
+      // 遍历当前弹幕的 sections
+      this.sections.forEach(section => {
+        if (section.sectionType === 'text') {
+          // 描边可见的时候，才执行这一句
+          if (
+            Utils.Color.isVisibleColor(this.br.renderConfig.strokeStyle) &&
+            this.br.renderConfig.lineWidth > 0
+          ) {
+            ctx.strokeText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
+          }
+          ctx.fillText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
+        } else if (section.sectionType === 'image') {
+          ctx.drawImage(
+            Utils.Cache.imageElementFactory(section.url),
+            this.left + section.leftOffset,
+            this.top + section.topOffset,
+            section.width,
+            section.height,
+          )
         }
-        ctx.fillText(section.text, this.left + section.leftOffset, this.top + section.topOffset);
-      } else if (section.sectionType === 'image') {
-        ctx.drawImage(
-          Utils.Cache.imageElementFactory(section.url),
-          this.left + section.leftOffset,
-          this.top + section.topOffset,
-          section.width,
-          section.height,
-        )
-      }
-    })
+      })
+    }
 
     // 每个弹幕渲染后
     this.br.afterBarrageRender && this.br.afterBarrageRender({
