@@ -108,6 +108,7 @@ export default class BarrageRenderer {
 			typeof container === 'string'
 				? document.getElementById(container)
 				: container;
+
 		this.canvas = document.createElement('canvas');
 		this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -116,9 +117,10 @@ export default class BarrageRenderer {
 
 		this.preRenderCanvas = document.createElement('canvas');
 		this.preRenderCanvasCtx = this.preRenderCanvas.getContext('2d') as CanvasRenderingContext2D;
-		this.preRenderOptimizer = new PreRenderOptimizer(this);
 
-		this.handleDOM(this.container, this.canvas, this.ctx);
+		this.handleDOM();
+
+		this.preRenderOptimizer = new PreRenderOptimizer(this);
 
 		// 设置好渲染配置
 		this.setRenderConfigInternal(renderConfig || {}, true);
@@ -148,38 +150,35 @@ export default class BarrageRenderer {
 
 	/**
 	 * 处理 DOM 相关
-	 * @param container 容器 DOM 元素
-	 * @param canvas canvas 元素
-	 * @param ctx 渲染上下文
 	 */
-	private handleDOM(container: HTMLElement | null, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D | null) {
-		if (!container) console.error('Unable to obtain container element');
-		if (!ctx) console.error('Unable to obtain CanvasRenderingContext2D');
-		if (!container || !ctx) return;
+	private handleDOM() {
+		if (!this.container) console.error('Unable to obtain container element');
+		if (!this.ctx) console.error('Unable to obtain CanvasRenderingContext2D');
+		if (!this.container || !this.ctx) return;
 		// 设置容器
-		container.style.position = 'relative';
+		this.container.style.position = 'relative';
 
 		// 设置 canvas
-		canvas.style.position = 'absolute';
-		canvas.style.left = '0px';
-		canvas.style.top = '0px';
-		canvas.style.pointerEvents = 'none';
-		canvas.width = container.clientWidth;
-		canvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
+		this.canvas.style.position = 'absolute';
+		this.canvas.style.left = '0px';
+		this.canvas.style.top = '0px';
+		this.canvas.style.pointerEvents = 'none';
+		this.canvas.width = this.container.clientWidth;
+		this.canvas.height = this.container.clientHeight - (this.renderConfig.heightReduce ?? 0);
 
 		// 将 canvas 添加到 container 中
-		container.appendChild(canvas);
+		this.container.appendChild(this.canvas);
 		
-		this.handleHighDprVague(canvas, ctx);
+		this.handleHighDprVague(this.canvas, this.ctx);
 		
 		// 需要同步处理离屏 canvas
-		this.offscreenCanvas.width = container.clientWidth;
-		this.offscreenCanvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
+		this.offscreenCanvas.width = this.container.clientWidth;
+		this.offscreenCanvas.height = this.container.clientHeight - (this.renderConfig.heightReduce ?? 0);
 		this.handleHighDprVague(this.offscreenCanvas, this.offscreenCanvasCtx);
 
 		// 需要同步处理离屏 canvas
-		this.preRenderCanvas.width = container.clientWidth;
-		this.preRenderCanvas.height = container.clientHeight - (this.renderConfig.heightReduce ?? 0);
+		this.preRenderCanvas.width = this.container.clientWidth;
+		this.preRenderCanvas.height = this.container.clientHeight - (this.renderConfig.heightReduce ?? 0);
 		this.handleHighDprVague(this.preRenderCanvas, this.preRenderCanvasCtx);
 	}
 	
@@ -215,7 +214,7 @@ export default class BarrageRenderer {
 	 */
 	resize() {
 		// 先处理 DOM 相关
-		this.handleDOM(this.container, this.canvas, this.ctx);
+		this.handleDOM();
 
 		const nowContainerSize = {
 			width: this.container?.clientWidth || 0,
@@ -237,6 +236,10 @@ export default class BarrageRenderer {
 				this.barrageLayoutCalculate.resize('BOTH');
 			}
 		}
+
+		// 设置字体描边以及阴影
+		this._setCtxFontStrokeShadow();
+
 		// 触发一帧的渲染
 		this.renderFrame();
 	}
@@ -291,7 +294,7 @@ export default class BarrageRenderer {
 		// 对布局有影响的属性：speed、heightReduce、renderRegion、avoidOverlap
 		if (!init && (isSpeedChange || isHeightReduceChange || isRenderRegionChange || isAvoidOverlapChange)) {
 			// 高度缩减需要重新处理 DOM
-			if (isHeightReduceChange) this.handleDOM(this.container, this.canvas, this.ctx);
+			if (isHeightReduceChange) this.handleDOM();
 			this.barrageLayoutCalculate.renderConfigChange(
 				isSpeedChange,
 				isHeightReduceChange,

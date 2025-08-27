@@ -31,9 +31,9 @@ export default function useFontStrokeAndShadow(barrageRenderer: Ref<BarrageRende
     },
     {
       id: 3,
-      name: '红色投影',
+      name: '紫色投影',
       config: {
-        shadowColor: 'red',
+        shadowColor: '#B303F2',
         shadowBlur: 1,
         shadowOffsetX: 1,
         shadowOffsetY: 1,
