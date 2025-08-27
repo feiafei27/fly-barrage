@@ -539,9 +539,9 @@ const generateBarrageDataSet = () => {
     isSpecial: true,
 
     fixedNum: 200,
-    scrollNum: 500,
+    scrollNum: 300,
     seniorNum: 0,
-    specialNum: 300,
+    specialNum: 100,
   });
 
   barrageRenderer.value?.setBarrages(barrages);

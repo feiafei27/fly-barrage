@@ -34,9 +34,11 @@ export default function useFontStrokeAndShadow(barrageRenderer: Ref<BarrageRende
       name: '紫色投影',
       config: {
         shadowColor: '#B303F2',
-        shadowBlur: 1,
-        shadowOffsetX: 1,
-        shadowOffsetY: 1,
+        // 这个阴影属性蛮影响性能的，如果可能的话，可以设置为 0
+        // 持续优化性能中
+        shadowBlur: 0,
+        shadowOffsetX: 2,
+        shadowOffsetY: 2,
       }
     }
   ])
